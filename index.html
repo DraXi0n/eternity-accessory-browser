@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fargo's Souls Mod Accessory Browser</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+    .container {
+      padding: 20px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filter-button {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: white;
+    }
+    .filter-button.active {
+      background-color: #333;
+      color: #00e676;
+      border-color: #00e676;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      padding: 15px;
+      border: 1px solid #333;
+      box-shadow: 0 0 8px rgba(0, 255, 100, 0.05);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 255, 100, 0.1);
+    }
+    .title {
+      font-size: 1.2em;
+      margin-bottom: 8px;
+    }
+    .stars {
+      color: #ffeb3b;
+      margin-bottom: 8px;
+    }
+    .type {
+      font-size: 0.9em;
+      color: #90caf9;
+      margin-bottom: 10px;
+    }
+    .description {
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    #search {
+      width: calc(100% - 2px);
+      padding: 8px 30px 8px 8px;
+      background-color: #1f1f1f;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .clear-button {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      font-weight: bold;
+      color: #aaa;
+      cursor: pointer;
+      user-select: none;
+      opacity: 0.3;
+    }
+    .clear-button.active {
+      opacity: 1;
+    }
+    .clear-button:hover {
+      color: white;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background-color: #1f1f1f;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+      color: #e0e0e0;
+    }
+    .close-button {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close-button:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="search-wrapper">
+      <input type="text" id="search" placeholder="Search by item name..." />
+      <span id="clearSearch" class="clear-button">&times;</span>
+    </div>
+    <div class="filters">
+      <button class="filter-button" data-star="⭐">⭐</button>
+      <button class="filter-button" data-star="⭐⭐">⭐⭐</button>
+      <button class="filter-button" data-star="⭐⭐⭐">⭐⭐⭐</button>
+      <button class="filter-button" data-star="⭐⭐⭐⭐">⭐⭐⭐⭐</button>
+      <button class="filter-button" data-star="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</button>
+      <button class="filter-button" data-star="❓">❓</button>
+      <button class="filter-button" data-type="Soul">Souls</button>
+      <button class="filter-button" data-type="Enchantment">Enchantments</button>
+      <button class="filter-button" data-type="Accessory">Accessories</button>
+    </div>
+    <p>Database adapted from <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur">this document.</a></p>
+    <div class="grid" id="cards-container">
+      <!-- Cards will be inserted here dynamically -->
+    </div>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div id="cardModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const container = document.getElementById('cards-container');
+    const searchInput = document.getElementById('search');
+    const clearBtn = document.getElementById('clearSearch');
+    const buttons = document.querySelectorAll('.filter-button');
+    let activeStars = new Set();
+    let activeType = null;
+
+    function truncate(text, maxLength) {
+      return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+    }
+
+    function createCard(item) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('data-full', JSON.stringify(item));
+      card.innerHTML = `
+        <div class="title">${item.name}</div>
+        <div class="stars">${item.rating}</div>
+        <div class="type">${item.type}</div>
+        <div class="description">${truncate(item.description, 550)}</div>
+      `;
+      return card;
+    }
+
+    function renderCards() {
+      container.innerHTML = '';
+      const keyword = searchInput.value.toLowerCase();
+      const filtered = data.filter(item => {
+        const matchesStar = activeStars.size === 0 || activeStars.has(item.rating);
+        const matchesType = !activeType || item.type === activeType;
+        const matchesSearch = item.name.toLowerCase().includes(keyword);
+        return matchesStar && matchesType && matchesSearch;
+      });
+      filtered.forEach(item => container.appendChild(createCard(item)));
+      bindCardClicks();
+      updateClearButton();
+    }
+
+    searchInput.addEventListener('input', renderCards);
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      renderCards();
+    });
+
+    function updateClearButton() {
+      if (searchInput.value.trim() !== '') {
+        clearBtn.classList.add('active');
+      } else {
+        clearBtn.classList.remove('active');
+      }
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const star = btn.getAttribute('data-star');
+        const type = btn.getAttribute('data-type');
+
+        if (star) {
+          btn.classList.toggle('active');
+          if (activeStars.has(star)) {
+            activeStars.delete(star);
+          } else {
+            activeStars.add(star);
+          }
+        }
+
+        if (type) {
+          document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+          if (activeType === type) {
+            activeType = null;
+          } else {
+            activeType = type;
+            btn.classList.add('active');
+          }
+        }
+
+        renderCards();
+      });
+    });
+
+    const modal = document.getElementById('cardModal');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.querySelector('.close-button');
+
+    closeBtn.onclick = () => { modal.style.display = 'none'; };
+    window.onclick = event => { if (event.target === modal) modal.style.display = 'none'; };
+
+    function bindCardClicks() {
+      document.querySelectorAll('.card').forEach(card => {
+        card.onclick = () => {
+          const item = JSON.parse(card.getAttribute('data-full'));
+          const wikiName = item.name.replace(/ /g, '_');
+          const wikiURL = `www.fargosmods.wiki.gg/wiki/${wikiName}`;
+          modalBody.innerHTML = `
+            <div class="title">${item.name}</div>
+            <div class="stars">${item.rating}</div>
+            <div class="type">${item.type}</div>
+            <div class="description">${item.description}</div>
+            <div style="text-align: right; margin-top: 20px;">
+              <a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline;">Wiki Link</a>
+            </div>
+          `;
+          modal.style.display = 'block';
+        };
+      });
+    }
+
+    renderCards();
+  </script>
+</body>
+</html>
