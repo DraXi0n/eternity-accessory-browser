@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fargo's Souls Mod Accessory Guide</title>
+  <title>Fargo's Souls Mod Accessory Browser</title>
   <style>
     body {
       margin: 0;
@@ -26,6 +26,7 @@
       border-radius: 4px;
       padding: 8px 12px;
       cursor: pointer;
+      color: white;
     }
     .filter-button.active {
       background-color: #333;
@@ -46,12 +47,10 @@
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
     .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0, 255, 100, 0.1);
     }
-
     .title {
       font-size: 1.2em;
       margin-bottom: 8px;
@@ -77,6 +76,9 @@
       color: white;
       border: 1px solid #444;
       border-radius: 4px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     /* Modal styles */
@@ -114,7 +116,7 @@
 </head>
 <body>
   <div class="container">
-    <input type="text" id="search" placeholder="Search by name or description..." />
+    <input type="text" id="search" placeholder="Search by item name..." />
     <div class="filters">
       <button class="filter-button" data-star="⭐">⭐</button>
       <button class="filter-button" data-star="⭐⭐">⭐⭐</button>
@@ -122,6 +124,9 @@
       <button class="filter-button" data-star="⭐⭐⭐⭐">⭐⭐⭐⭐</button>
       <button class="filter-button" data-star="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</button>
       <button class="filter-button" data-star="❓">❓</button>
+      <button class="filter-button" data-type="Soul">Souls</button>
+      <button class="filter-button" data-type="Enchantment">Enchantments</button>
+      <button class="filter-button" data-type="Accessory">Accessories</button>
     </div>
     <p>Database adapted from <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur">this document.</a></p>
     <div class="grid" id="cards-container">
@@ -143,15 +148,21 @@
     const searchInput = document.getElementById('search');
     const buttons = document.querySelectorAll('.filter-button');
     let activeStars = new Set();
+    let activeType = null;
+
+    function truncate(text, maxLength) {
+      return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+    }
 
     function createCard(item) {
       const card = document.createElement('div');
       card.className = 'card';
+      card.setAttribute('data-full', JSON.stringify(item));
       card.innerHTML = `
         <div class="title">${item.name}</div>
         <div class="stars">${item.rating}</div>
         <div class="type">${item.type}</div>
-        <div class="description">${item.description}</div>
+        <div class="description">${truncate(item.description, 550)}</div>
       `;
       return card;
     }
@@ -161,11 +172,12 @@
       const keyword = searchInput.value.toLowerCase();
       const filtered = data.filter(item => {
         const matchesStar = activeStars.size === 0 || activeStars.has(item.rating);
-        const matchesSearch = item.name.toLowerCase().includes(keyword) || item.description.toLowerCase().includes(keyword);
-        return matchesStar && matchesSearch;
+        const matchesType = !activeType || item.type === activeType;
+        const matchesSearch = item.name.toLowerCase().includes(keyword);
+        return matchesStar && matchesType && matchesSearch;
       });
       filtered.forEach(item => container.appendChild(createCard(item)));
-      bindCardClicks(); // Attach modal logic
+      bindCardClicks();
     }
 
     searchInput.addEventListener('input', renderCards);
@@ -173,17 +185,31 @@
     buttons.forEach(btn => {
       btn.addEventListener('click', () => {
         const star = btn.getAttribute('data-star');
-        btn.classList.toggle('active');
-        if (activeStars.has(star)) {
-          activeStars.delete(star);
-        } else {
-          activeStars.add(star);
+        const type = btn.getAttribute('data-type');
+
+        if (star) {
+          btn.classList.toggle('active');
+          if (activeStars.has(star)) {
+            activeStars.delete(star);
+          } else {
+            activeStars.add(star);
+          }
         }
+
+        if (type) {
+          document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+          if (activeType === type) {
+            activeType = null;
+          } else {
+            activeType = type;
+            btn.classList.add('active');
+          }
+        }
+
         renderCards();
       });
     });
 
-    // Modal logic
     const modal = document.getElementById('cardModal');
     const modalBody = document.getElementById('modalBody');
     const closeBtn = document.querySelector('.close-button');
@@ -194,7 +220,13 @@
     function bindCardClicks() {
       document.querySelectorAll('.card').forEach(card => {
         card.onclick = () => {
-          modalBody.innerHTML = card.innerHTML;
+          const item = JSON.parse(card.getAttribute('data-full'));
+          modalBody.innerHTML = `
+            <div class="title">${item.name}</div>
+            <div class="stars">${item.rating}</div>
+            <div class="type">${item.type}</div>
+            <div class="description">${item.description}</div>
+          `;
           modal.style.display = 'block';
         };
       });
