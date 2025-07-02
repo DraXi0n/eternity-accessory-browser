@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -264,7 +263,7 @@
         card.onclick = () => {
           const item = JSON.parse(card.getAttribute('data-full'));
           const wikiName = item.name.replace(/ /g, '_');
-          const wikiURL = `www.fargosmods.wiki.gg/wiki/${wikiName}`;
+          const wikiURL = `https://fargosmods.wiki.gg/wiki/${wikiName}`;
           modalBody.innerHTML = `
             <div class="title">${item.name}</div>
             <div class="stars">${item.rating}</div>
