@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fargo's Souls Mod Accessory Guide</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .container {
+      padding: 20px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filter-button {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .filter-button.active {
+      background-color: #333;
+      color: #00e676;
+      border-color: #00e676;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      padding: 15px;
+      border: 1px solid #333;
+      box-shadow: 0 0 8px rgba(0, 255, 100, 0.05);
+    }
+    .title {
+      font-size: 1.2em;
+      margin-bottom: 8px;
+    }
+    .stars {
+      color: #ffeb3b;
+      margin-bottom: 8px;
+    }
+    .type {
+      font-size: 0.9em;
+      color: #90caf9;
+      margin-bottom: 10px;
+    }
+    .description {
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+    #search {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      background-color: #1f1f1f;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <input type="text" id="search" placeholder="Search by name or description..." />
+    <div class="filters">
+      <button class="filter-button" data-star="⭐">⭐</button>
+      <button class="filter-button" data-star="⭐⭐">⭐⭐</button>
+      <button class="filter-button" data-star="⭐⭐⭐">⭐⭐⭐</button>
+      <button class="filter-button" data-star="⭐⭐⭐⭐">⭐⭐⭐⭐</button>
+      <button class="filter-button" data-star="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</button>
+      <button class="filter-button" data-star="❓">❓</button>
+    </div>
+    <div class="grid" id="cards-container">
+      <!-- Cards will be inserted here dynamically -->
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const container = document.getElementById('cards-container');
+    const searchInput = document.getElementById('search');
+    const buttons = document.querySelectorAll('.filter-button');
+    let activeStars = new Set();
+
+    function createCard(item) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="title">${item.name}</div>
+        <div class="stars">${item.rating}</div>
+        <div class="type">${item.type}</div>
+        <div class="description">${item.description}</div>
+      `;
+      return card;
+    }
+
+    function renderCards() {
+      container.innerHTML = '';
+      const keyword = searchInput.value.toLowerCase();
+      const filtered = data.filter(item => {
+        const matchesStar = activeStars.size === 0 || activeStars.has(item.rating);
+        const matchesSearch = item.name.toLowerCase().includes(keyword) || item.description.toLowerCase().includes(keyword);
+        return matchesStar && matchesSearch;
+      });
+      filtered.forEach(item => container.appendChild(createCard(item)));
+    }
+
+    searchInput.addEventListener('input', renderCards);
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const star = btn.getAttribute('data-star');
+        btn.classList.toggle('active');
+        if (activeStars.has(star)) {
+          activeStars.delete(star);
+        } else {
+          activeStars.add(star);
+        }
+        renderCards();
+      });
+    });
+
+    renderCards();
+  </script>
+</body>
+</html>
