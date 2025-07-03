@@ -1,3 +1,5 @@
+// Massive image map for every image in the browser. There's probably a more efficient way to do this lol.
+
 const iconMap = {
     "Wood Enchantment":
       "https://fargosmods.wiki.gg/images/3/37/Wood_Enchantment.png?bd2d81",
