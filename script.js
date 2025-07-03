@@ -6,32 +6,52 @@ const bossCheckboxes = bossModal.querySelectorAll(
   'input[type="checkbox"]'
 );
 let selectedBossFilters = new Set();
-let showDLCItems = true;
+let showDLCItems = false;
 
 bossBtn.onclick = () => {
   bossModal.style.display = "block";
 };
 
 closeBossModal.onclick = () => {
+  lastConfirmedBossStates.forEach((wasChecked, box) => {
+    box.checked = wasChecked;
+  });
+  bossModal.style.display = "none";
+};closeBossModal.onclick = () => {
+  // Restore checkbox visuals to last confirmed state
+  lastConfirmedBossStates.forEach((wasChecked, box) => {
+    box.checked = wasChecked;
+  });
+
   bossModal.style.display = "none";
 };
+
+
 
 window.addEventListener("click", (e) => {
   if (e.target === bossModal) bossModal.style.display = "none";
 });
 
-// Boss filters confirm button
+let lastConfirmedBossStates = new Map();
+
 confirmBossFilters.onclick = () => {
   selectedBossFilters.clear();
+  lastConfirmedBossStates.clear(); 
+
   bossCheckboxes.forEach((box) => {
     if (box.checked) {
       const values = box.value.split("|");
       values.forEach((val) => selectedBossFilters.add(val));
     }
+    
+    lastConfirmedBossStates.set(box, box.checked);
   });
+
   bossModal.style.display = "none";
   renderCards();
+  bossBtn.classList.toggle("active", selectedBossFilters.size > 0);
 };
+
 
 const container = document.getElementById("cards-container");
 const searchInput = document.getElementById("search");
@@ -40,14 +60,13 @@ const buttons = document.querySelectorAll(".filter-button");
 let activeStars = new Set();
 let activeType = null;
 
-// Truncate item cards with longer descriptions
 function truncate(text, maxLength) {
   return text.length > maxLength
-    ? text.slice(0, maxLength) + "..."
+    ? text.slice(0, maxLength).trimEnd() + "..."
     : text;
 }
 
-// Card setup
+
 function createCard(item) {
   const iconURL =
     iconMap[item.name] ||
@@ -62,7 +81,8 @@ function createCard(item) {
   <div class="title">${item.name}</div>
   <div class="stars">${item.rating}</div>
   <div class="type">${item.type}</div>
-  <div class="description">${truncate(item.description, 400)}</div>
+  <div class="description">${truncate(item.description, 300).replace(/\n/g, "<br>")}</div>
+
 `;
   return card;
 }
@@ -162,7 +182,8 @@ function bindCardClicks() {
 </div>
 <div class="stars">${item.rating}</div>
 <div class="type">${item.type}</div>
-<div class="description">${item.description}</div>
+<div class="description">${item.description.replace(/\n/g, "<br>")}</div>
+
 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
 <div style="color: white; font-size: 0.95em;">Availability: ${
 item.availability || "Unknown"
@@ -210,16 +231,14 @@ resetFiltersBtn.addEventListener("click", () => {
   dlcToggle.classList.add("inactive");
 
   selectedBossFilters.clear();
+  bossBtn.classList.remove("active");
   bossCheckboxes.forEach((box) => (box.checked = false));
 
-  // Re-render the cards without any filters
   renderCards();
 });
 
-// Calling renderCards() for when the browser is opened
 renderCards();
 
-// Add icons to labels in boss filters modal
 document.querySelectorAll("img.boss-icon").forEach((img) => {
   const key = img.getAttribute("data-boss");
   img.src =
