@@ -123,7 +123,7 @@ const data = [
     "rating": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "type": "Enchantment",
     "description": "Effects: Effects of Ash Wood enchantment, but additionally, you take no damage from lava, can move through it more easily, and become Lava Wet while in lava and for 10 seconds after leaving it. While Lava Wet, you fire ash wood fireballs even without being debuffed, and your attacks make explosions which also scale with your weapon\u2019s damage up to a cap. The most powerful enchantment for killing Wall of Flesh, and it\u2019s remarkably good on Skeletron and Queen Bee if you bother to put lava on the ground. Shooting fireballs plus explosions has great crowd control and single target damage potential, and it's easy to dip in lava. As far as I can tell, this is the strongest pre-hardmode damage enchantment. The damage cap is only relevant in hardmode, so don\u2019t worry about it in pre-hardmode. Still good with Wizard Enchantment in hardmode on high damage per shot weapons.",
-    "availability": "Post-Skeletron"
+    "availability": "Post-Evil Boss"
   },
   {
     "name": "Ancient Cobalt Enchantment",
