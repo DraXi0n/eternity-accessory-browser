@@ -20,6 +20,7 @@ window.addEventListener("click", (e) => {
   if (e.target === bossModal) bossModal.style.display = "none";
 });
 
+// Boss filters confirm button
 confirmBossFilters.onclick = () => {
   selectedBossFilters.clear();
   bossCheckboxes.forEach((box) => {
@@ -39,12 +40,14 @@ const buttons = document.querySelectorAll(".filter-button");
 let activeStars = new Set();
 let activeType = null;
 
+// Truncate item cards with longer descriptions
 function truncate(text, maxLength) {
   return text.length > maxLength
     ? text.slice(0, maxLength) + "..."
     : text;
 }
 
+// Card setup
 function createCard(item) {
   const iconURL =
     iconMap[item.name] ||
@@ -209,11 +212,14 @@ resetFiltersBtn.addEventListener("click", () => {
   selectedBossFilters.clear();
   bossCheckboxes.forEach((box) => (box.checked = false));
 
+  // Re-render the cards without any filters
   renderCards();
 });
 
+// Calling renderCards() for when the browser is opened
 renderCards();
 
+// Add icons to labels in boss filters modal
 document.querySelectorAll("img.boss-icon").forEach((img) => {
   const key = img.getAttribute("data-boss");
   img.src =
