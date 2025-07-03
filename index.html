@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="stylesheet" href="style.css" />
   </head>
+  <!-- I suck at coding and used AI for many parts of this, so if anyone wants to improve it, feel free! :) -->
   <body>
     <div class="container">
       <div class="search-wrapper">
@@ -59,7 +60,7 @@
           show only the items that become obtainable after defeating the
           selected boss(es), helping you discover new gear now available to you.
         </p>
-
+       <!-- Boss filters modal content --> 
         <div
           id="bossFiltersContainer"
           style="
@@ -71,6 +72,7 @@
             flex-wrap: nowrap;
           "
         >
+         <!-- Pre-Hardmode Section --> 
           <div class="boss-section">
             <h3 style="color: #00e676">Pre-Hardmode</h3>
             <label
@@ -124,7 +126,7 @@
               <img class="boss-icon" data-boss="Wall of Flesh"
             /></label>
           </div>
-
+         <!-- Hardmode section --> 
           <div class="boss-section">
             <h3 style="color: #00e676">Hardmode</h3>
             <label
@@ -192,7 +194,7 @@
               <img class="boss-icon" data-boss="Mutant"
             /></label>
           </div>
-
+         <!-- DLC section --> 
           <div class="boss-section">
             <h3 style="color: #00e676">DLC</h3>
             <label
@@ -226,7 +228,7 @@
             /></label>
           </div>
         </div>
-
+       <!-- Confirm button --> 
         <div style="text-align: right; margin-top: 20px">
           <button
             id="confirmBossFilters"
