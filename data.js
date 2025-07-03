@@ -1,3 +1,5 @@
+// Database for every item. DLC items have an additional property to signify that they are DLC.
+
 const data = [
   {
     "name": "Force of Timber",
