@@ -48,7 +48,7 @@ const data = [
     "description": "Effects: After grabbing any pickup, whether it\u2019s a vanilla heart/star, a nebula booster, a bee enchantment flower, a necro enchantment grave, a cosmos moon booster, a fossil/spectre pickup, a wyvern feather orb, or anything similar, you spawn a damaging star that homes in on enemies. Additionally, you gain a buff for 5 seconds that gives all your attacks a second chance to crit if they failed to crit the first time. Finally, enemies sometimes spawn mana stars when hit.\n\nA powerful crit boosting enchantment. If you have 50% base crit chance, this effectively turns it into a 75% chance to crit. Gets worse at very low and very high crit chances, since rerolling a 1% or a 99% is pointless. The damaging star also has very good damage. Perfect enchantment if you are showered in pickups at all times due to the sheer volume of stars and uptime on the buff. Notably, it rerolls Spider Enchantment\u2019s summoner critical hits: Spider Enchantment\u2019s crits are weaker than normal, so this may not be as useful, but you will still get some benefit."
   },
   {
-    "name": "Terra Force",
+    "name": "Force of Terra",
     "rating": "\u2b50\u2b50\u2b50\u2b50",
     "type": "Force",
     "description": "Effects: Make melee weapons and whips somewhat bigger. Buffed tin crit effect. 60% less damage taken from debuffs. Shoot explosive lightning sometimes; parrying blocks 200 damage, maxes your tin crit charge, and shoots some explosive lightning. Additionally, picking up any item or pickup gives you 20% DR for a few seconds, you pick up things from a longer range, and it has the Iron Enchantment reforge effect. The size boost is very useful on melee weapons such as the Slime Slinging Slasher, but not useful at all on most weapons. The lightning and the explosions do good damage, and the parry works great with Heart of the Master\u2019s bonus parry effects. The crit boost can be very useful if you dont have anything else boosting your crit already, but it's otherwise not noteworthy. Synergizes well with any accessory that drops pickups like mana stars, nebula boosters, bee flowers, etc. In the DLC, there are many embiggenable melee weapons, some of which were already big to begin with such as the Holy Collider, or which are very powerful already such as the Murasama. This benefit isn\u2019t quite drastic enough to bump it up to five stars, but it is noteworthy."
@@ -474,7 +474,7 @@ const data = [
     "description": "Dropped by Eye of Cthulhu\nGrants immunity to Berserked. While dashing or running quickly, you spawn scythes that go in the direction you\u2019re running. When you use the active skill, you get 20% damage, 20% crit, and a massive attack speed increase for 7.5 seconds, however, you also lose 20 defense, 30% damage reduction, and you can\u2019t stop moving or attacking. After this ability ends, you get stunned for 2.5 seconds. The blood scythes deal reasonable damage, but the active skill is controversial and rarely used; it has massive offensive benefits, but could get you killed. I used it to great success on many pre-hardmode bosses, but yes, it did also get me very, very killed sometimes."
   },
   {
-    "name": "Queen's Stinger",
+    "name": "The Queen\u2019s Stinger",
     "rating": "\u2b50\u2b50\u2b50",
     "type": "Accessory",
     "description": "Dropped by Queen Bee.\nGrants immunity to Infested. Increases armor penetration by 10 if you have the honey buff, as well as causes bees and weak hornets to be friendly. Using the active skill makes you perform a short dash towards your cursor with a 4 second cooldown that inflicts acid venom on any enemies you pass through (no iframes included though).\n\nMost useful offensively with rapid fire weapons and most useful for mobility on bosses with very tricky to avoid attacks. Remember that you have the bee dash and use it often to avoid attacks."
@@ -636,7 +636,7 @@ const data = [
     "description": "Dropped by Deerclops\nEffects: Grants immunity to Frozen and Slow. Dashing leaves a trail of ice spikes. Use the active skill to fastfall, which creates a glacial eruption on landing. A pre-hardmode fastfall active skill with some extra damage, plus your dashes have a little damaging trail. The damage is surprisingly good if you bind the active skill to right click and ground pound whenever possible, and i\u2019ve been told you can dodge some attacks more effectively with this (does anything in pre-hardmode actually require faster fall speed though? not really). It\u2019s a reasonably good accessory for damage for non-deviantt late pre-hardmode bosses if you\u2019re willing to ground pound a lot."
   },
   {
-    "name": "Verdant Doomslayer Mask",
+    "name": "Verdant Doomsayer Mask",
     "rating": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "type": "Accessory",
     "description": "Effects: Grants treasure box fastfall and magical cleanse active skills. Grants several immunities. increases regeneration based on light received and fires additional attacks while attacking based on your current class\u2019s weapon. Converts accessory minion effects and unused minion slots into +1% damage each: if disabled, summons a miniature plantera minion. Disable the minions to damage effect: it is a trap that\u2019s enabled by default and hinders your other accessories. An additive 1% damage per effect removed is usually not worth losing your best effects, and filling your minion slots gives you more than 1% damage in return. You can consider re-enabling it for visibility or framerate improvement purposes if you wish though.\n\nThe Doomsayer Mask is mostly good for killing moon lord and early post-moon lord bosses due to the extreme offensive benefits and reasonably good defensive benefits. Remember your magical cleanse, and maybe use the fastfall if you have nothing else to fill that active skill slot. Since the recipe uses four pillar fragments, and you can craft three pillar fragments into a fourth, and the accessory gives immunity to pillar debuffs, you can craft it before killing your least favorite pillar to make it much easier."
@@ -666,7 +666,7 @@ const data = [
     "description": "Heart of the Master \u2b50\u2b50\u2b50\u2b50\u2b50 Effects: Grants five active skills for some reason, a bunch of immunities, small damage and damage reduction increases, shrinks your hitbox, grants +100% flight time, grants most vanilla potion buffs, grants precision seal hotkey, and summons three true eyes of cthulhu and a saucer minion as long as you disable the unhelpful minions to damage option.\n\nDisable the minions to damage effect: it is a trap that\u2019s enabled by default and hinders your other accessories. An additive 1% damage per effect removed is usually not worth losing your best effects, and filling your minion slots gives you more than 1% damage in return. You can consider re-enabling it for visibility or framerate improvement purposes if you wish though.\n\nA fantastic accessory, but sometimes I secretly wonder if it\u2019s overrated. Then I remember it makes Force of Life even better, the parry lets you heal from Abom hits in all but the hardest difficulties, it shrinks your hitbox, it adds a ton of damage, and so on and so forth, and I remember that it's rated exactly how it should be."
   },
   {
-    "name": "Pumpking's Cape",
+    "name": "Pumpking\u2019s Cape",
     "rating": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "type": "Accessory",
     "description": "Dropped by the Pumpking with a 20% drop chance\nEffects: Grants immunity to Living Wasteland. Increases your damage and crit chance by 5%, and gives you a new parry. While parrying, you get an aura of Rotting, and if you block exactly as an attack hits you, you will dodge the attack, heal based on the blocked damage, and counterattack with a spray of scythes which deal damage based on the blocked damage (capped at 1000). This parry has a cooldown of several seconds. Arguably the strongest hardmode accessory because it just makes you immortal if you land half your parries. Adding Silver Enchantment is overkill, as it will inherit the super short parry cooldown and longer parry window of Silver Enchantment. Golem, Empress of Light, Moon Lord, and even many post-moon lord bosses become far easier with this. I deliberately ram into lasers all the time to regain health.\nNote that Squeaky Toy and Bionomic Cluster can reduce damage to 1, which means you have a small chance to only heal 1 health when parrying something; don\u2019t use this with those accessories. TIP FOR PARRYING: You can\u2019t parry during your weapon\u2019s use time cooldown, so wait for your weapon to vanish before right clicking."
@@ -786,7 +786,7 @@ const data = [
     "description": "Effects: Increases fishing skill, fish bite your bobber almost immediately, and grants the effects of Lava Proof Tackle Bag. Surprisingly easy to craft, and powerful; the nearly instant fishing lets you grab truly enormous piles of fishing loot."
   },
   {
-    "name": "Box Of Gizmos",
+    "name": "Box of Gizmos",
     "rating": "\u2b50\u2b50\u2b50",
     "type": "Accessory",
     "description": "Dropped By Trojan Squirrel\nEffects: While in inventory, standing still gives you a weaker Spelunker Potion effect that only adds fancy sparkles near valuables, as well as the Hunter Potion effect. Enemies emit light at night, and grants autofire to non-weapon items. You killed Trojan Squirrel, so you might as well keep it in your inventory for the mild bonuses. It doesn\u2019t actually do anything unique if you put it in an accessory slot though. Wait, is this even an accessory? I never tried putting this in a slot so I have no idea. Whatever, I\u2019m lumping it in with all the other \u201cin inventory/vanity\u201d accessories anyway."
@@ -876,7 +876,7 @@ const data = [
     "description": "Effects: Grants running speed, but not as fast as hermes boots. You start out with these, so you might as well put them on. Surprisingly viable against Trojan Squirrel, but you\u2019ll want to replace them when possible."
   },
   {
-    "name": "Puff In A Bottle",
+    "name": "Puff in a Bottle",
     "rating": "\u2b50\u2b50",
     "type": "Accessory",
     "description": "Effects: Grants a very weak double jump. You also start out with this. It\u2019s better than nothing, and surprisingly viable on Trojan Squirrel, but replace it when you can. At least you can equip this one alongside other double jumps and use this to stop fall damage, so it\u2019s better than the Eurus socks in that regard."
@@ -888,111 +888,128 @@ const data = [
     "description": "Patreon item Effects: Spawns a damaging razor blade that hovers near you and follows your cursor: when you swing anything with a standard broadsword animation or with the eternity mode broadsword rework animation, the razor launches with increased armor penetration, automatically landing critical hits while launched. One of the easiest to make accessories in the entire mod, and when combined with early swords like the Enchanted Sword (found for free in Cursed Coffin\u2019s room), you can deal great damage early on to bosses and enemies. Falls off in effectiveness later on, but it\u2019s craftable using nothing but wood, iron, and chains, so make it as soon as possible if you\u2019re using any broadsword type melee weapon. \n\nBecause bug nets use the standard broadsword animation, they can launch the razor blade, making this a fantastic pre-boss accessory for weaponless challenge runs, but this is a strange use case and doesn\u2019t affect the overall rating."
   },
   {
-    "name": "soul of eterniry",
+    "name": "Soul of Eternity",
     "rating": "\u2b50\u2b50\u2b50",
     "type": "Soul",
-    "description": "effectz: makes u god when u equip it.\n\ngood but seen better tbh Very quick DLC Rankings These items only appear in the Fargo\u2019s Souls DLC when Calamity is installed: base calamity accessories are not rated in this guide, but as a general rule, you mostly want to equip accessories from the Fargo\u2019s side of things, occasionally using something from Calamity alongside them. Ram dash shields are good on many calamity bosses and some vanilla ones, but you should never use them on bosses like the fargo siblings since they\u2019re virtually useless on them. Other notably good DLC picks include The Absorber and The Sponge, as well as some of their wings."
+    "description": "effectz: makes u god when u equip it.\n\ngood but seen better tbh"
   },
   {
-    "name": "Force of The Gale",
+    "name": "Force of the Gale",
     "rating": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "type": "Force",
-    "description": "Effects: Gain an infinite number of unusual, highly controllable, and hurricane fast gale jumps that can send you up, down, or sideways. Holding the jump button generates sharp spines attached to you. Once you have six spines, your next jump launches them as homing projectiles that deal heavy damage and inflict sulphuric poisoning. Finally, you gain more damage the faster you move, up to a cap of 40% (like statigel, but with no added momentum hijinks) It has a learning curve, but the jumps are strong enough and controllable enough for this to be roughly equal to the two big souls wing options in speed, and it comes with other benefits too. Very good accessory on lots of bosses, assuming this type of movement is something you like. Give it a shot!\n\nThe damage from the spines is an okay boost, but if you want to get the most of it, remember that small jumps won\u2019t grow spines, but long jumps from holding the button will grow spines. This also lets you go pretty fast and get a lot of statigel damage. Sulphuric Poisoning also inflicts 120 damage per second, and is boosted by Force of Earth if you have that equipped.\n\nWhen equipped alongside hover wings, it disables the wings but causes their hover to replace the down jump, so keep that in mind."
+    "description": "Effects: Gain an infinite number of unusual, highly controllable, and hurricane fast gale jumps that can send you up, down, or sideways. Holding the jump button generates sharp spines attached to you. Once you have six spines, your next jump launches them as homing projectiles that deal heavy damage and inflict sulphuric poisoning. Finally, you gain more damage the faster you move, up to a cap of 40% (like statigel, but with no added momentum hijinks) It has a learning curve, but the jumps are strong enough and controllable enough for this to be roughly equal to the two big souls wing options in speed, and it comes with other benefits too. Very good accessory on lots of bosses, assuming this type of movement is something you like. Give it a shot!\n\nThe damage from the spines is an okay boost, but if you want to get the most of it, remember that small jumps won\u2019t grow spines, but long jumps from holding the button will grow spines. This also lets you go pretty fast and get a lot of statigel damage. Sulphuric Poisoning also inflicts 120 damage per second, and is boosted by Force of Earth if you have that equipped.\n\nWhen equipped alongside hover wings, it disables the wings but causes their hover to replace the down jump, so keep that in mind.",
+    "dlc": true
   },
   {
     "name": "Snow Ruffian Enchantment",
     "rating": "\u2753",
     "type": "Enchantment",
-    "description": "Effects: Gain a weird gliding mechanic (try it for yourself!) More of an exploration and \u201cfor fun\u201d enchantment than anything else. I don\u2019t typically see people recommend or use this for combat, but you can goof off with this or explore sky islands without a gravity potion since you can fly almost infinitely if you perfectly time your glides and dives. Has a strange synergy with Statigel enchantment; its movement alterations strengthen this enchantment\u2019s pseudo-flight, turning it into a very easy yet weird infinite flight. Give it a try.\n\nThe wizard version apparently gives you wings on par with calamity\u2019s starlight wings, which allow you to fly, and then you can glide when you\u2019re out of flight time. No idea if you would ever want to do that, but the option is there.\n\nYou can also equip this alongside Force of the Gale and glide after a jump, which is extremely pointless since you have infinite jumps which are better than gliding, but it\u2019s another thing you can do to goof off."
+    "description": "Effects: Gain a weird gliding mechanic (try it for yourself!) More of an exploration and \u201cfor fun\u201d enchantment than anything else. I don\u2019t typically see people recommend or use this for combat, but you can goof off with this or explore sky islands without a gravity potion since you can fly almost infinitely if you perfectly time your glides and dives. Has a strange synergy with Statigel enchantment; its movement alterations strengthen this enchantment\u2019s pseudo-flight, turning it into a very easy yet weird infinite flight. Give it a try.\n\nThe wizard version apparently gives you wings on par with calamity\u2019s starlight wings, which allow you to fly, and then you can glide when you\u2019re out of flight time. No idea if you would ever want to do that, but the option is there.\n\nYou can also equip this alongside Force of the Gale and glide after a jump, which is extremely pointless since you have infinite jumps which are better than gliding, but it\u2019s another thing you can do to goof off.",
+    "dlc": true
   },
   {
     "name": "Statigel Enchantment",
     "rating": "\u2b50\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Increases maximum movement speed, but you accelerate and decelerate much more slowly, making your movement slippery. Gain up to +35% damage based on how fast you\u2019re moving. It\u2019s impossible to fully reach +35% damage due to the formula, but +25% or +30% are much more attainable. This is a huge damage boost, but at the cost of your movement becoming less precise. Dashes still instantly accelerate you as usual, meaning you can use the default Calamity dash to reverse direction as if you were bouncing. Hooks also stop your movement completely as usual. Anything that lets you accelerate and decelerate faster can also counteract the acceleration/deceleration reduction, like Meteor Enchantment or just good ol\u2019 Aeolus Boots. The wizard version further increases your top run speed and doubles the damage up to a whopping 70%, which makes this powerful even in late hardmode."
+    "description": "Effects: Increases maximum movement speed, but you accelerate and decelerate much more slowly, making your movement slippery. Gain up to +35% damage based on how fast you\u2019re moving. It\u2019s impossible to fully reach +35% damage due to the formula, but +25% or +30% are much more attainable. This is a huge damage boost, but at the cost of your movement becoming less precise. Dashes still instantly accelerate you as usual, meaning you can use the default Calamity dash to reverse direction as if you were bouncing. Hooks also stop your movement completely as usual. Anything that lets you accelerate and decelerate faster can also counteract the acceleration/deceleration reduction, like Meteor Enchantment or just good ol\u2019 Aeolus Boots. The wizard version further increases your top run speed and doubles the damage up to a whopping 70%, which makes this powerful even in late hardmode.",
+    "dlc": true
   },
   {
     "name": "Desert Prowler Enchantment",
     "rating": "\u2753",
     "type": "Enchantment",
-    "description": "Effects: Gain the ability to charge up your ground jumps for extra height; additionally, you can dive towards the ground to fall faster. Doing either of these things damages and knocks back nearby enemies. Extremely fun enchantment, though like with Snow Ruffian, its mostly for goofing off and general exploration. Outperformed by Ancient Cobalt in practice, but it\u2019s easier to get. It also helps you get initial height for your Snow Ruffian gliding. I don\u2019t think people use this for boss fights, but it could be fun to try it out."
+    "description": "Effects: Gain the ability to charge up your ground jumps for extra height; additionally, you can dive towards the ground to fall faster. Doing either of these things damages and knocks back nearby enemies. Extremely fun enchantment, though like with Snow Ruffian, its mostly for goofing off and general exploration. Outperformed by Ancient Cobalt in practice, but it\u2019s easier to get. It also helps you get initial height for your Snow Ruffian gliding. I don\u2019t think people use this for boss fights, but it could be fun to try it out.",
+    "dlc": true
   },
   {
     "name": "Victide Enchantment",
     "rating": "\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Spikes extend from your body, which grant 4 defense while attached; attack to charge the spikes, and release to shoot the spikes. Reasonably okay accessory-based damage to early pre-hardmode bosses. 4 defense isn\u2019t a lot, but I\u2019ll take it."
+    "description": "Effects: Spikes extend from your body, which grant 4 defense while attached; attack to charge the spikes, and release to shoot the spikes. Reasonably okay accessory-based damage to early pre-hardmode bosses. 4 defense isn\u2019t a lot, but I\u2019ll take it.",
+    "dlc": true
   },
   {
     "name": "Sulphurous Enchantment",
     "rating": "\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Grants a sulphur double jump that releases a sulphur bubble on use: when you attack the bubble, it emits gas that damages nearby enemies. Reasonably okay accessory-based damage to some pre-hardmode bosses, and this one also has a double jump. Requires you to bother to attack the bubble to get any damage from it."
+    "description": "Effects: Grants a sulphur double jump that releases a sulphur bubble on use: when you attack the bubble, it emits gas that damages nearby enemies. Reasonably okay accessory-based damage to some pre-hardmode bosses, and this one also has a double jump. Requires you to bother to attack the bubble to get any damage from it.",
+    "dlc": true
   },
   {
-    "name": "Force of The Elements",
+    "name": "Force of the Elements",
     "rating": "\u2b50\u2b50\u2b50\u2b50",
     "type": "Force",
-    "description": "Effects: Grants two modes, which can be switched as an active skill. The default Magma Mode\u2122 increases damage reduction by 30% and defense by 30, and allows you to build up heat while attacking: stop attacking at full heat or get hit to vent heat, which grants Reaver Rage and spawns homing chaos flare projectiles.\n\nBlizzard Mode\u2122 gives increased flight time, flight speed, life regen, hook velocity, and a lower dash cooldown. You also gain up to 50% more damage the longer you stay in the air, and after being in the air for a second without getting hit, your attacks spawn arrows from the sky. The projectiles spawned from each mode are roughly equivalent and are each a nice small damage boost. Magma Mode is obviously ideal for defensive purposes, but keep in mind that 30% damage reduction is much lower than it sounds due to calamity\u2019s diminishing returns on damage reduction. Blizzard Mode is better for offense due to the whopping 50% damage; you\u2019ll want to use it when you\u2019re flying a lot and not landing on platforms very often, or if the assorted mobility benefits are useful.\n\nOne thing you can try to do is get hit, reduce the damage with Magma Mode, then heal it off faster by switching to Blizzard Mode for its life regen, but I don\u2019t know if anyone will ever bother to do this. What I do is pick the mode I want, then switch out the active skill until I want to change modes again.\n\nAs far as which mode is better, I\u2019m not sure, since damage reduction and 30 defense are very good, but so is getting a big damage boost. Pick whatever suits your playstyle."
+    "description": "Effects: Grants two modes, which can be switched as an active skill. The default Magma Mode\u2122 increases damage reduction by 30% and defense by 30, and allows you to build up heat while attacking: stop attacking at full heat or get hit to vent heat, which grants Reaver Rage and spawns homing chaos flare projectiles.\n\nBlizzard Mode\u2122 gives increased flight time, flight speed, life regen, hook velocity, and a lower dash cooldown. You also gain up to 50% more damage the longer you stay in the air, and after being in the air for a second without getting hit, your attacks spawn arrows from the sky. The projectiles spawned from each mode are roughly equivalent and are each a nice small damage boost. Magma Mode is obviously ideal for defensive purposes, but keep in mind that 30% damage reduction is much lower than it sounds due to calamity\u2019s diminishing returns on damage reduction. Blizzard Mode is better for offense due to the whopping 50% damage; you\u2019ll want to use it when you\u2019re flying a lot and not landing on platforms very often, or if the assorted mobility benefits are useful.\n\nOne thing you can try to do is get hit, reduce the damage with Magma Mode, then heal it off faster by switching to Blizzard Mode for its life regen, but I don\u2019t know if anyone will ever bother to do this. What I do is pick the mode I want, then switch out the active skill until I want to change modes again.\n\nAs far as which mode is better, I\u2019m not sure, since damage reduction and 30 defense are very good, but so is getting a big damage boost. Pick whatever suits your playstyle.",
+    "dlc": true
   },
   {
     "name": "Aerospec Enchantment",
     "rating": "\u2b50\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Grants +5% crit chance and summon damage whenever you jump or use a double jump: the bonus resets when your jumps are reset or a mount is used. Benefits are maximized after six jumps. Okay damage for people who like to jump around like crazy, and makes the balloon items more worth using. Becomes remarkably powerful when used underwater, as flipper jumps count as jumps, granting up to +30% crit chance and summon damage, or twice as much with the wizard enchantment version. With Spider Enchantment, this becomes a truly formidable summoner damage bonus\u2026 at the cost of having to fight the boss entirely underwater or with Banished Baron\u2019s Rusted Oxygen Tank, which is just enough of a downside to keep this out of five stars territory. Don\u2019t forget your Aquatic Emblem for +50 defense (yes, it\u2019s that powerful for some reason) if you plan on fighting the boss underwater."
+    "description": "Effects: Grants +5% crit chance and summon damage whenever you jump or use a double jump: the bonus resets when your jumps are reset or a mount is used. Benefits are maximized after six jumps. Okay damage for people who like to jump around like crazy, and makes the balloon items more worth using. Becomes remarkably powerful when used underwater, as flipper jumps count as jumps, granting up to +30% crit chance and summon damage, or twice as much with the wizard enchantment version. With Spider Enchantment, this becomes a truly formidable summoner damage bonus\u2026 at the cost of having to fight the boss entirely underwater or with Banished Baron\u2019s Rusted Oxygen Tank, which is just enough of a downside to keep this out of five stars territory. Don\u2019t forget your Aquatic Emblem for +50 defense (yes, it\u2019s that powerful for some reason) if you plan on fighting the boss underwater.",
+    "dlc": true
   },
   {
-    "name": "Daedalus  Enchantment",
+    "name": "Daedalus Enchantment",
     "rating": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Increases flight time by 25%. After a second in the air without landing or getting hit, your attacks occasionally spawn several special energy arrows from the sky on the cursor. Getting hit also halves your remaining wing time. Big damage. Very big damage! Some bosses are easier to hit with the arrows than others, but a regular daedalus will do a lot of damage, and a wizard-boosted daedalus will do even more damage due to extra arrow damage, amount, and velocity. Extra flight time is nice and helps mitigate the one downside of the enchantment. Just make sure to fly around a lot and avoid landing on platforms, or else you won\u2019t get your cool arrows."
+    "description": "Effects: Increases flight time by 25%. After a second in the air without landing or getting hit, your attacks occasionally spawn several special energy arrows from the sky on the cursor. Getting hit also halves your remaining wing time. Big damage. Very big damage! Some bosses are easier to hit with the arrows than others, but a regular daedalus will do a lot of damage, and a wizard-boosted daedalus will do even more damage due to extra arrow damage, amount, and velocity. Extra flight time is nice and helps mitigate the one downside of the enchantment. Just make sure to fly around a lot and avoid landing on platforms, or else you won\u2019t get your cool arrows.",
+    "dlc": true
   },
   {
     "name": "Reaver Enchantment",
     "rating": "\u2b50\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Grants two modes, which can be switched as an active skill. The default Plated Mode gives 15% damage reduction and 15 defense, and taking damage grants Reaver Rage and summons a thorn spike. Swift Mode grants massive life regeneration, increases wing time and speed by 10%, reduces dash cooldown, and increases hook speed. Very similar to its upgraded force version in terms of general tactics and overall usefulness. The wizard version of Plated Mode grants 30 defense and 30% damage reduction, by the way. You can either do the big brained switching thing I mentioned earlier with Force of the Elements or just not bind the active skill and keep using the default Plated Mode. I personally do the latter."
+    "description": "Effects: Grants two modes, which can be switched as an active skill. The default Plated Mode gives 15% damage reduction and 15 defense, and taking damage grants Reaver Rage and summons a thorn spike. Swift Mode grants massive life regeneration, increases wing time and speed by 10%, reduces dash cooldown, and increases hook speed. Very similar to its upgraded force version in terms of general tactics and overall usefulness. The wizard version of Plated Mode grants 30 defense and 30% damage reduction, by the way. You can either do the big brained switching thing I mentioned earlier with Force of the Elements or just not bind the active skill and keep using the default Plated Mode. I personally do the latter.",
+    "dlc": true
   },
   {
     "name": "Hydrothermic Enchantment",
     "rating": "\u2b50\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Attacking builds up heat, which gives up to 30% damage reduction based on how full the heat meter is: at full heat, stop attacking to vent it, firing chaos flares towards your cursor for 3 seconds while the meter slowly decreases. Getting hit also vents heat, regardless of heat level, with a lower chaos flare duration. 30% damage reduction is a lot, but keep calamity\u2019s damage reduction curve in mind: you\u2019ll have less than 30% in practice. The chaos flares also do good damage if you bother to vent your heat, and the wizard version improves both the chaos flare damage and the venting duration, and it also increases the damage reduction to 45%. Miscellaneous DLC Accessories"
+    "description": "Effects: Attacking builds up heat, which gives up to 30% damage reduction based on how full the heat meter is: at full heat, stop attacking to vent it, firing chaos flares towards your cursor for 3 seconds while the meter slowly decreases. Getting hit also vents heat, regardless of heat level, with a lower chaos flare duration. 30% damage reduction is a lot, but keep calamity\u2019s damage reduction curve in mind: you\u2019ll have less than 30% in practice. The chaos flares also do good damage if you bother to vent your heat, and the wizard version improves both the chaos flare damage and the venting duration, and it also increases the damage reduction to 45%. Miscellaneous DLC Accessories",
+    "dlc": true
   },
   {
     "name": "Wulfrum Enchantment",
     "rating": "\u2b50\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: A drone follows your cursor and scans enemies, telling you their debuff weaknesses/resistances in Calamity\u2019s special elemental debuff type system. Scanned enemies take flat extra damage over time while under the effects of any damaging debuff. Cheap to make with a mild benefit, and unique in that it funnels you down looking up how debuffs work in Calamity, making you go insane as you try to put a debuff build together. Good item, but unequip it when you find something better. Useless if you never inflict a debuff."
+    "description": "Effects: A drone follows your cursor and scans enemies, telling you their debuff weaknesses/resistances in Calamity\u2019s special elemental debuff type system. Scanned enemies take flat extra damage over time while under the effects of any damaging debuff. Cheap to make with a mild benefit, and unique in that it funnels you down looking up how debuffs work in Calamity, making you go insane as you try to put a debuff build together. Good item, but unequip it when you find something better. Useless if you never inflict a debuff.",
+    "dlc": true
   },
   {
     "name": "Marnite Architect Enchantment",
     "rating": "\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Grants +10% tile placement speed and +5 tile placement range. Lasers strike nearby enemies when building and mining, grants effects of the Marnite Repulsion Shield, and grants 2 defense. Bad for straightforward combat, but keeps bats from hitting you while you\u2019re mining and protects you while you build your house. Some combat-oriented tools don\u2019t cause you to shoot lasers. There are niche weaponless builds (or tool-based builds) that use this, but that\u2019s really just a meme strategy, so it\u2019s really just good for building and mining."
+    "description": "Effects: Grants +10% tile placement speed and +5 tile placement range. Lasers strike nearby enemies when building and mining, grants effects of the Marnite Repulsion Shield, and grants 2 defense. Bad for straightforward combat, but keeps bats from hitting you while you\u2019re mining and protects you while you build your house. Some combat-oriented tools don\u2019t cause you to shoot lasers. There are niche weaponless builds (or tool-based builds) that use this, but that\u2019s really just a meme strategy, so it\u2019s really just good for building and mining.",
+    "dlc": true
   },
   {
     "name": "Titan Heart Enchantment",
     "rating": "\u2b50\u2b50",
     "type": "Enchantment",
-    "description": "Effects: Adrenaline charges 20% faster, increased to 70% while grounded. You gain additional damage reduction based on your adrenaline charge, up to 15%. Finally, it increases your movement speed and acceleration by 5%. If you can find a boss that lets you run in one direction in a straight line on a platform without taking any damage, this is the perfect enchantment for those bosses! Unfortunately, if you discover any bosses like this cough cough astrum aureus cough cough ravager, you probably didn\u2019t have much trouble killing them anyway. For difficult bosses, Queen Slime is probably the ideal boss for this enchantment, because you can walk on a platform next to or diagonally under the boss and avoid (most of) her attacks, but that\u2019s about it as far as recommendations go.\n\nThe recipe also includes Stress Pills, which are a pain to farm, so good luck with that. The rest is easily obtained by fishing and making the armor set."
+    "description": "Effects: Adrenaline charges 20% faster, increased to 70% while grounded. You gain additional damage reduction based on your adrenaline charge, up to 15%. Finally, it increases your movement speed and acceleration by 5%. If you can find a boss that lets you run in one direction in a straight line on a platform without taking any damage, this is the perfect enchantment for those bosses! Unfortunately, if you discover any bosses like this cough cough astrum aureus cough cough ravager, you probably didn\u2019t have much trouble killing them anyway. For difficult bosses, Queen Slime is probably the ideal boss for this enchantment, because you can walk on a platform next to or diagonally under the boss and avoid (most of) her attacks, but that\u2019s about it as far as recommendations go.\n\nThe recipe also includes Stress Pills, which are a pain to farm, so good luck with that. The rest is easily obtained by fishing and making the armor set.",
+    "dlc": true
   },
   {
     "name": "Outlaw\u2019s Essence",
     "rating": "\u2b50\u2b50\u2b50",
     "type": "Accessory",
-    "description": "Effects: Grants +18% rogue damage, +5% rogue projectile velocity, and +5% rogue critical hit chance. It\u2019s okay. Like usual for essences, it\u2019s mostly just a moderate damage boost and nothing else."
+    "description": "Effects: Grants +18% rogue damage, +5% rogue projectile velocity, and +5% rogue critical hit chance. It\u2019s okay. Like usual for essences, it\u2019s mostly just a moderate damage boost and nothing else.",
+    "dlc": true
   },
   {
     "name": "Vagabond\u2019s Soul",
     "rating": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "type": "Soul",
-    "description": "Effects: Grants +30% rogue damage, +15% rogue projectile velocity, and +15% rogue critical hit chance. Additionally, grants the effects of Nanotech and the Eclipse Mirror. Eclipse Mirror is basically mandatory for rogues due to all of the massive bonuses its grants, and this gives you even more bonuses on top of that."
+    "description": "Effects: Grants +30% rogue damage, +15% rogue projectile velocity, and +15% rogue critical hit chance. Additionally, grants the effects of Nanotech and the Eclipse Mirror. Eclipse Mirror is basically mandatory for rogues due to all of the massive bonuses its grants, and this gives you even more bonuses on top of that.",
+    "dlc": true
   },
   {
     "name": "Brand of the Brimstone Witch",
     "rating": "\u2b50\u2b50\u2b50\u2b50\u2b50",
     "type": "Accessory",
-    "description": "Effects: Grants +50 defense, and the benefits of countless endgame Calamity accessories. Effects such as Draedon\u2019s Heart nanomachines can be toggled in the accessory toggle menu.\n\nThe most powerful accessory the DLC adds, and an essential part of any DLC Mutant loadout. Equip this and then don\u2019t unequip it until you craft the Soul of Eternity."
+    "description": "Effects: Grants +50 defense, and the benefits of countless endgame Calamity accessories. Effects such as Draedon\u2019s Heart nanomachines can be toggled in the accessory toggle menu.\n\nThe most powerful accessory the DLC adds, and an essential part of any DLC Mutant loadout. Equip this and then don\u2019t unequip it until you craft the Soul of Eternity.",
+    "dlc": true
   }
 ];
