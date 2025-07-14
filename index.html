@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fargo's Souls Mod Accessory Browser</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <!-- If you're reading this, God loves you -->
+  <body>
+    <div class="container">
+      <div class="search-wrapper">
+        <input type="text" id="search" placeholder="Search by item name..." />
+        <span id="clearSearch" class="clear-button">&times;</span>
+      </div>
+      <div class="filters">
+        <div class="dropdown-wrapper">
+          <button id="ratingDropdownBtn" class="filter-button">
+            Rating: Any <span class="dropdown-arrow">▼</span>
+          </button>
+          <div id="ratingDropdown" class="dropdown-menu">
+            <div data-value="" class="active">Any</div>
+            <div data-value="⭐">⭐</div>
+            <div data-value="⭐⭐">⭐⭐</div>
+            <div data-value="⭐⭐⭐">⭐⭐⭐</div>
+            <div data-value="⭐⭐⭐⭐">⭐⭐⭐⭐</div>
+            <div data-value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+
+        <div class="dropdown-wrapper">
+          <button id="typeDropdownBtn" class="filter-button">
+            Type: Any <span class="dropdown-arrow">▼</span>
+          </button>
+          <div id="typeDropdown" class="dropdown-menu">
+            <div data-value="" class="active">Any</div>
+            <div data-value="Enchantment">Enchantments</div>
+            <div data-value="Force">Forces</div>
+            <div data-value="Soul">Souls</div>
+            <div data-value="Accessory">Other</div>
+          </div>
+        </div>
+
+        <button id="bossFilterBtn" class="filter-button">
+          <span class="label">Availability</span>
+          <span class="ellipsis">…</span>
+        </button>
+
+        <div class="dropdown-wrapper">
+          <button id="sortDropdownBtn" class="filter-button">
+            Sort by: A–Z <span class="dropdown-arrow">▼</span>
+          </button>
+          <div id="sortDropdown" class="dropdown-menu">
+            <div data-value="az" class="active">A–Z</div>
+            <div data-value="parent">Parent</div>
+            <div data-value="dlcFirst">DLC First</div>
+          </div>
+        </div>
+
+        <button id="dlcToggle" class="filter-button inactive">
+          <span class="checkmark">✔</span> Show
+          <span class="dlc-tag" title="Fargo's Souls DLC"> DLC </span>
+          Items
+        </button>
+
+        <button id="resetFiltersBtn" class="filter-button danger">
+          Reset Filters
+        </button>
+      </div>
+
+      <div class="grid" id="cards-container"></div>
+    </div>
+
+    <div id="cardModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div id="modalBody"></div>
+      </div>
+    </div>
+    <div id="bossModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" id="closeBossModal">&times;</span>
+
+        <p style="color: white; font-size: 1.1em; margin-bottom: 15px">
+          Select one or more bosses you have defeated. This filter will then
+          show only the items that become obtainable as a result of defeating
+          the selected boss(es), helping you discover new gear now available to
+          you.
+        </p>
+
+        <div id="bossFiltersContainer">
+          <div class="boss-section">
+            <h3 style="color: #00e676">Pre-Hardmode</h3>
+            <label
+              ><input type="checkbox" value="Pre-Boss" /> No Bosses (Pre-Boss)
+              <img class="boss-icon" data-boss="No Bosses"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Trojan Squirrel" /> Trojan
+              Squirrel <img class="boss-icon" data-boss="Trojan Squirrel"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-King Slime" /> King Slime
+              <img class="boss-icon" data-boss="King Slime"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Eye of Cthulhu" /> Eye of
+              Cthulhu <img class="boss-icon" data-boss="Eye of Cthulhu"
+            /></label>
+            <label
+              ><input
+                type="checkbox"
+                value="Post-Eater of Worlds|Post-Evil Boss" />
+              Eater of Worlds
+              <img class="boss-icon" data-boss="Eater of Worlds"
+            /></label>
+            <label
+              ><input
+                type="checkbox"
+                value="Post-Brain of Cthulhu|Post-Evil Boss" />
+              Brain of Cthulhu
+              <img class="boss-icon" data-boss="Brain of Cthulhu"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Queen Bee" /> Queen Bee
+              <img class="boss-icon" data-boss="Queen Bee"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Skeletron" /> Skeletron
+              <img class="boss-icon" data-boss="Skeletron"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Deerclops" /> Deerclops
+              <img class="boss-icon" data-boss="Deerclops"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Deviantt" /> Deviantt
+              <img class="boss-icon" data-boss="Deviantt"
+            /></label>
+            <label
+              ><input type="checkbox" value="Hardmode" /> Wall of Flesh
+              <img class="boss-icon" data-boss="Wall of Flesh"
+            /></label>
+          </div>
+
+          <div class="boss-section">
+            <h3 style="color: #00e676">Hardmode</h3>
+            <label
+              ><input type="checkbox" value="Post-Queen Slime" /> Queen Slime
+              <img class="boss-icon" data-boss="Queen Slime"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-First Mech Boss" /> First Mech
+              Boss <img class="boss-icon" data-boss="First Mech Boss"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Twins" /> The Twins
+              <img class="boss-icon" data-boss="The Twins"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Destroyer" /> The Destroyer
+              <img class="boss-icon" data-boss="Destroyer"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Skeletron Prime" /> Skeletron
+              Prime <img class="boss-icon" data-boss="Skeletron Prime"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Mech Bosses" /> All Mech
+              Bosses <img class="boss-icon" data-boss="Mech Bosses"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Plantera" /> Plantera
+              <img class="boss-icon" data-boss="Plantera"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Golem" /> Golem
+              <img class="boss-icon" data-boss="Golem"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Betsy" /> Betsy
+              <img class="boss-icon" data-boss="Betsy"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Empress of Light" /> Empress
+              of Light <img class="boss-icon" data-boss="Empress of Light"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Duke Fishron" /> Duke Fishron
+              <img class="boss-icon" data-boss="Duke Fishron"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Lunatic Cultist" /> Lunatic
+              Cultist <img class="boss-icon" data-boss="Lunatic Cultist"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Moon Lord" /> Moon Lord
+              <img class="boss-icon" data-boss="Moon Lord"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Eridanus" /> Eridanus
+              <img class="boss-icon" data-boss="Eridanus"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Abominationn" /> Abominationn
+              <img class="boss-icon" data-boss="Abominationn"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Mutant" /> Mutant
+              <img class="boss-icon" data-boss="Mutant"
+            /></label>
+          </div>
+
+          <div class="boss-section">
+            <h3 style="color: #00e676">DLC</h3>
+            <label
+              ><input type="checkbox" value="Post-Desert Scourge" /> Desert
+              Scourge <img class="boss-icon" data-boss="Desert Scourge"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Perforators/Hive Mind" />
+              Perforators / Hive Mind
+              <img class="boss-icon" data-boss="Perforators/Hive Mind"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Slime God" /> Slime God
+              <img class="boss-icon" data-boss="Slime God"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Cryogen" /> Cryogen
+              <img class="boss-icon" data-boss="Cryogen"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Providence" /> Providence
+              <img class="boss-icon" data-boss="Providence"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Yharon" /> Yharon
+              <img class="boss-icon" data-boss="Yharon"
+            /></label>
+            <label
+              ><input type="checkbox" value="Post-Supreme Calamitas" /> Supreme
+              Calamitas <img class="boss-icon" data-boss="Supreme Calamitas"
+            /></label>
+          </div>
+        </div>
+
+        <div style="text-align: right; margin-top: 20px">
+          <button
+            id="confirmBossFilters"
+            style="
+              padding: 8px 14px;
+              background: #00e676;
+              border: none;
+              border-radius: 4px;
+              color: black;
+              font-weight: bold;
+              cursor: pointer;
+            "
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="icons.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
