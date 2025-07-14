@@ -9,6 +9,105 @@ let userSelectedSortAz = false;
 let selectedBossFilters = new Set();
 let showDLCItems = false;
 
+function showItemModal(item) {
+  const wikiName = encodeURIComponent(item.name.replace(/’/g, "'").replace(/ /g, "_"));
+  const wikiURL = `https://fargosmods.wiki.gg/wiki/${wikiName}`;
+  const iconURL = iconMap[item.name] || "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
+
+  modalBody.innerHTML = `
+    <div class="modal-header">
+      <div class="title" style="display: flex; align-items: center; gap: 8px;">
+        <span>${item.name}</span>
+        <img src="${iconURL}" alt="${item.name} icon"
+          style="width: 1.2em; height: 1.2em; object-fit: contain; border-radius: 4px;">
+      </div>
+      <div class="stars">${item.rating}</div>
+      <div class="type">${item.type}</div>
+    </div>
+    <div class="scroll-description">${formatDescription(item.description)}</div>
+    <div class="modal-footer" style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 20px; gap: 12px; font-size: 0.95em; color: white; flex-wrap: wrap;">
+      <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Source</a>
+      <span class="modal-tag availability-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Filter by availability">${item.availability || "Unknown"}</span>
+      <span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>
+      ${
+        data.some(child => child.parent === item.name)
+          ? `<span class="modal-tag children-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to children section">Children</span>`
+          : ''
+      }
+      ${
+        item.dlc
+          ? `<span class="modal-tag dlc-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show DLC items only">DLC</span>`
+          : ''
+      }
+      <a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Wiki Link</a>
+    </div>
+  `;
+
+  // Bind event listeners on modal tags:
+  const availabilityTag = modalBody.querySelector(".availability-tag");
+  availabilityTag?.addEventListener("click", () => {
+    resetFiltersAndSetAvailability(item.availability);
+    closeModal();
+  });
+
+  const parentTag = modalBody.querySelector(".parent-tag");
+  parentTag?.addEventListener("click", () => {
+    const headerName = item.parent || "Miscellaneous";
+    resetFiltersAndScrollToHeader(headerName);
+    closeModal();
+  });
+
+  const childrenTag = modalBody.querySelector(".children-tag");
+  childrenTag?.addEventListener("click", () => {
+    resetFiltersAndScrollToHeader(item.name);
+    closeModal();
+  });
+
+  const dlcTag = modalBody.querySelector(".dlc-tag");
+  dlcTag?.addEventListener("click", () => {
+    activeStars.clear();
+    activeStars.add("Any");
+    ratingDropdownBtn.innerHTML = `Rating: Any <span class="dropdown-arrow">▼</span>`;
+    ratingDropdownBtn.classList.remove("active");
+    ratingOptions.forEach((opt) => {
+      const r = opt.getAttribute("data-value");
+      opt.classList.toggle("active", r === "");
+    });
+
+    activeType = null;
+    typeDropdownBtn.innerHTML = `Type: Any <span class="dropdown-arrow">▼</span>`;
+    typeDropdownBtn.classList.remove("active");
+    typeOptions.forEach((opt) => opt.classList.remove("active"));
+    typeOptions[0].classList.add("active");
+
+    searchInput.value = "";
+    updateClearButton();
+
+    selectedBossFilters.clear();
+    bossCheckboxes.forEach((box) => (box.checked = false));
+    bossBtn.classList.remove("active");
+    bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
+
+    showDLCItems = true;
+    dlcToggle.classList.add("active");
+    dlcToggle.classList.remove("inactive");
+
+    currentSort = "dlcFirst";
+    sortOptions.forEach((opt) => opt.classList.remove("active"));
+    const dlcFirstOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === "dlcFirst");
+    if (dlcFirstOption) {
+      dlcFirstOption.classList.add("active");
+      sortDropdownBtn.innerHTML = `Sort by: ${dlcFirstOption.textContent} <span class="dropdown-arrow">▼</span>`;
+    }
+
+    renderCards();
+    closeModal();
+  });
+
+  openModal();
+}
+
+
 function createParentHeader(parentName) {
   const headerWrapper = document.createElement("div");
   headerWrapper.className = "parent-header-wrapper";
@@ -33,33 +132,15 @@ function createParentHeader(parentName) {
   headerWrapper.appendChild(header);
   headerWrapper.appendChild(hr);
 
-  headerWrapper.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const parentItem = data.find(item => item.name === parentName);
-    if (!parentItem) return;
+headerWrapper.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const parentItem = data.find(item => item.name === parentName);
+  if (!parentItem) return;
 
-    const wikiName = encodeURIComponent(parentItem.name.replace(/’/g, "'").replace(/ /g, "_"));
-    const wikiURL = `https://fargosmods.wiki.gg/wiki/${wikiName}`;
-    const iconURL = iconMap[parentItem.name] || "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
+  showItemModal(parentItem);
+});
 
-    modalBody.innerHTML = `
-      <div class="title" style="display: flex; align-items: center; gap: 8px;">
-        <span>${parentItem.name}</span>
-        <img src="${iconURL}" alt="${parentItem.name} icon"
-          style="width: 1.2em; height: 1.2em; object-fit: contain; border-radius: 4px;">
-      </div>
-      <div class="stars">${parentItem.rating}</div>
-      <div class="type">${parentItem.type}</div>
-      <div class="description scroll-description">${formatDescription(parentItem.description)}</div>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-        <div style="color: white; font-size: 0.95em;">Availability: ${
-          parentItem.availability || "Unknown"
-        }</div>
-        <a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline;">Wiki Link</a>
-      </div>
-    `;
-    openModal();
-  });
+
 
   return headerWrapper;
 }
@@ -505,6 +586,7 @@ const modalBody = document.getElementById("modalBody");
 const closeBtn = document.querySelector(".close-button");
 
 function openModal() {
+  console.log("openModal called");
   modal.classList.remove('hide');
   modal.style.display = 'block';
 
