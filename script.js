@@ -2,17 +2,61 @@ const bossBtn = document.getElementById("bossFilterBtn");
 const bossModal = document.getElementById("bossModal");
 const closeBossModal = document.getElementById("closeBossModal");
 const confirmBossFilters = document.getElementById("confirmBossFilters");
-const bossCheckboxes = bossModal.querySelectorAll(
-  'input[type="checkbox"]'
-);
+const bossCheckboxes = bossModal.querySelectorAll('input[type="checkbox"]');
 let userSelectedSortAz = false;
 let selectedBossFilters = new Set();
 let showDLCItems = false;
+const DLC_SPAN = `<span class="dlc-tag" title="Fargo's Souls DLC">DLC</span>`;
+
+function activateDLCSorting() {
+  activeStars.clear();
+  activeStars.add("Any");
+  ratingDropdownBtn.innerHTML = `Rating: Any <span class="dropdown-arrow">▼</span>`;
+  ratingDropdownBtn.classList.remove("active");
+  ratingOptions.forEach((opt) => {
+    const r = opt.getAttribute("data-value");
+    opt.classList.toggle("active", r === "");
+  });
+
+  activeType = null;
+  typeDropdownBtn.innerHTML = `Type: Any <span class="dropdown-arrow">▼</span>`;
+  typeDropdownBtn.classList.remove("active");
+  typeOptions.forEach((opt) => opt.classList.remove("active"));
+  typeOptions[0].classList.add("active");
+
+  searchInput.value = "";
+  updateClearButton();
+
+  selectedBossFilters.clear();
+  bossCheckboxes.forEach((box) => (box.checked = false));
+  bossBtn.classList.remove("active");
+  bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
+
+  showDLCItems = true;
+  dlcToggle.classList.add("active");
+  dlcToggle.classList.remove("inactive");
+
+  currentSort = "dlcFirst";
+  sortOptions.forEach((opt) => opt.classList.remove("active"));
+  const dlcFirstOption = Array.from(sortOptions).find(
+    (opt) => opt.getAttribute("data-value") === "dlcFirst"
+  );
+  if (dlcFirstOption) {
+    dlcFirstOption.classList.add("active");
+    sortDropdownBtn.innerHTML = `Sort by: ${dlcFirstOption.textContent} <span class="dropdown-arrow">▼</span>`;
+  }
+
+  renderCards();
+}
 
 function showItemModal(item) {
-  const wikiName = encodeURIComponent(item.name.replace(/’/g, "'").replace(/ /g, "_"));
+  const wikiName = encodeURIComponent(
+    item.name.replace(/’/g, "'").replace(/ /g, "_")
+  );
   const wikiURL = `https://fargosmods.wiki.gg/wiki/${wikiName}`;
-  const iconURL = iconMap[item.name] || "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
+  const iconURL =
+    iconMap[item.name] ||
+    "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
 
   modalBody.innerHTML = `
     <div class="modal-header">
@@ -27,27 +71,29 @@ function showItemModal(item) {
     <div class="scroll-description">${formatDescription(item.description)}</div>
     <div class="modal-footer" style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 20px; gap: 12px; font-size: 0.95em; color: white; flex-wrap: wrap;">
       <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Source</a>
-      <span class="modal-tag availability-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Filter by availability">${item.availability || "Unknown"}</span>
+      <span class="modal-tag availability-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show other items with this availability">${
+        item.availability || "Unknown"
+      }</span>
       <span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>
       ${
-        data.some(child => child.parent === item.name)
+        data.some((child) => child.parent === item.name)
           ? `<span class="modal-tag children-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to children section">Children</span>`
-          : ''
+          : ""
       }
       ${
         item.dlc
-          ? `<span class="modal-tag dlc-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show DLC items only">DLC</span>`
-          : ''
+          ? `<span class="modal-tag dlc-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show DLC items">DLC</span>`
+          : ""
       }
       <a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Wiki Link</a>
     </div>
   `;
 
-  // Bind event listeners on modal tags:
   const availabilityTag = modalBody.querySelector(".availability-tag");
   availabilityTag?.addEventListener("click", () => {
     resetFiltersAndSetAvailability(item.availability);
     closeModal();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   const parentTag = modalBody.querySelector(".parent-tag");
@@ -55,58 +101,25 @@ function showItemModal(item) {
     const headerName = item.parent || "Miscellaneous";
     resetFiltersAndScrollToHeader(headerName);
     closeModal();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   const childrenTag = modalBody.querySelector(".children-tag");
   childrenTag?.addEventListener("click", () => {
     resetFiltersAndScrollToHeader(item.name);
     closeModal();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   const dlcTag = modalBody.querySelector(".dlc-tag");
   dlcTag?.addEventListener("click", () => {
-    activeStars.clear();
-    activeStars.add("Any");
-    ratingDropdownBtn.innerHTML = `Rating: Any <span class="dropdown-arrow">▼</span>`;
-    ratingDropdownBtn.classList.remove("active");
-    ratingOptions.forEach((opt) => {
-      const r = opt.getAttribute("data-value");
-      opt.classList.toggle("active", r === "");
-    });
-
-    activeType = null;
-    typeDropdownBtn.innerHTML = `Type: Any <span class="dropdown-arrow">▼</span>`;
-    typeDropdownBtn.classList.remove("active");
-    typeOptions.forEach((opt) => opt.classList.remove("active"));
-    typeOptions[0].classList.add("active");
-
-    searchInput.value = "";
-    updateClearButton();
-
-    selectedBossFilters.clear();
-    bossCheckboxes.forEach((box) => (box.checked = false));
-    bossBtn.classList.remove("active");
-    bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
-
-    showDLCItems = true;
-    dlcToggle.classList.add("active");
-    dlcToggle.classList.remove("inactive");
-
-    currentSort = "dlcFirst";
-    sortOptions.forEach((opt) => opt.classList.remove("active"));
-    const dlcFirstOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === "dlcFirst");
-    if (dlcFirstOption) {
-      dlcFirstOption.classList.add("active");
-      sortDropdownBtn.innerHTML = `Sort by: ${dlcFirstOption.textContent} <span class="dropdown-arrow">▼</span>`;
-    }
-
-    renderCards();
+    activateDLCSorting();
     closeModal();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   openModal();
 }
-
 
 function createParentHeader(parentName) {
   const headerWrapper = document.createElement("div");
@@ -119,12 +132,23 @@ function createParentHeader(parentName) {
   titleSpan.textContent = parentName;
 
   const icon = document.createElement("img");
-  icon.src = iconMap[parentName] || "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
+  icon.src =
+    iconMap[parentName] ||
+    "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
   icon.alt = `${parentName} icon`;
   icon.className = "parent-header-icon";
 
   header.appendChild(titleSpan);
   header.appendChild(icon);
+
+  const parentItem = data.find((i) => i.name === parentName);
+  if (parentItem?.dlc) {
+    const dlcTag = document.createElement("span");
+    dlcTag.className = "dlc-tag";
+    dlcTag.title = "Fargo's Souls DLC";
+    dlcTag.textContent = "DLC";
+    header.appendChild(dlcTag);
+  }
 
   const hr = document.createElement("hr");
   hr.className = "parent-hr";
@@ -132,19 +156,15 @@ function createParentHeader(parentName) {
   headerWrapper.appendChild(header);
   headerWrapper.appendChild(hr);
 
-headerWrapper.addEventListener("click", (e) => {
-  e.stopPropagation();
-  const parentItem = data.find(item => item.name === parentName);
-  if (!parentItem) return;
-
-  showItemModal(parentItem);
-});
-
-
+  headerWrapper.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const parentItem = data.find((item) => item.name === parentName);
+    if (!parentItem) return;
+    showItemModal(parentItem);
+  });
 
   return headerWrapper;
 }
-
 
 function resetFiltersAndScrollToHeader(headerName) {
   activeStars.clear();
@@ -168,7 +188,7 @@ function resetFiltersAndScrollToHeader(headerName) {
   typeOptions.forEach((opt) => opt.classList.remove("active"));
   typeOptions[0].classList.add("active");
 
-  bossCheckboxes.forEach(box => box.checked = false);
+  bossCheckboxes.forEach((box) => (box.checked = false));
   selectedBossFilters.clear();
   bossBtn.classList.remove("active");
   bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
@@ -178,7 +198,9 @@ function resetFiltersAndScrollToHeader(headerName) {
   dlcToggle.classList.add("inactive");
 
   currentSort = "parent";
-  const parentOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === "parent");
+  const parentOption = Array.from(sortOptions).find(
+    (opt) => opt.getAttribute("data-value") === "parent"
+  );
   if (parentOption) {
     sortOptions.forEach((opt) => opt.classList.remove("active"));
     parentOption.classList.add("active");
@@ -199,8 +221,8 @@ function resetFiltersAndScrollToHeader(headerName) {
 }
 
 function resetFiltersAndSetAvailability(availability) {
-  searchInput.value = "";       // Clear search bar text
-updateClearButton();          // Update clear button state accordingly
+  searchInput.value = "";
+  updateClearButton();
 
   activeStars.clear();
   activeStars.add("Any");
@@ -220,7 +242,7 @@ updateClearButton();          // Update clear button state accordingly
   typeOptions.forEach((opt) => opt.classList.remove("active"));
   typeOptions[0].classList.add("active");
 
-  bossCheckboxes.forEach(box => box.checked = false);
+  bossCheckboxes.forEach((box) => (box.checked = false));
   selectedBossFilters.clear();
   bossBtn.classList.remove("active");
   bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
@@ -229,7 +251,7 @@ updateClearButton();          // Update clear button state accordingly
   dlcToggle.classList.remove("active");
   dlcToggle.classList.add("inactive");
 
-  bossCheckboxes.forEach(box => {
+  bossCheckboxes.forEach((box) => {
     if (box.value.split("|").includes(availability)) {
       box.checked = true;
       selectedBossFilters.add(availability);
@@ -239,8 +261,10 @@ updateClearButton();          // Update clear button state accordingly
   bossBtn.querySelector(".ellipsis")?.remove();
   bossBtn.insertAdjacentHTML("beforeend", `<span class="ellipsis">…</span>`);
 
-  currentSort = "parent"; // reset sort to parent view
-  const parentOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === "parent");
+  currentSort = "parent";
+  const parentOption = Array.from(sortOptions).find(
+    (opt) => opt.getAttribute("data-value") === "parent"
+  );
   if (parentOption) {
     sortOptions.forEach((opt) => opt.classList.remove("active"));
     parentOption.classList.add("active");
@@ -259,20 +283,27 @@ closeBossModal.onclick = () => {
     box.checked = wasChecked;
   });
 
-  closeBossModalFunc(); // Use the animation-aware close function below
+  closeBossModalFunc();
 };
 
 function formatDescription(desc) {
   return desc
-    .replace(/DLC/g, '<span class="dlc-tag" title="Fargo\'s Souls DLC">DLC</span>')
-    .replace(/\n/g, '<br>');
+    .replace(
+      /DLC/g,
+      '<span class="dlc-tag" title="Fargo\'s Souls DLC">DLC</span>'
+    )
+    .replace(/\n/g, "<br>");
 }
 
 function itemMatchesFilters(item) {
-  const ratingMatch = selectedRatings.length === 0 || selectedRatings.includes(item.rating);
-  const availabilityMatch = selectedBossFilters.size === 0 || selectedBossFilters.has(item.availability);
-  const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(item.type);
-  const dlcMatch = showDLCItems || !item.dlc; // ✅ new condition
+  const ratingMatch =
+    selectedRatings.length === 0 || selectedRatings.includes(item.rating);
+  const availabilityMatch =
+    selectedBossFilters.size === 0 ||
+    selectedBossFilters.has(item.availability);
+  const typeMatch =
+    selectedTypes.length === 0 || selectedTypes.includes(item.type);
+  const dlcMatch = showDLCItems || !item.dlc;
   return ratingMatch && availabilityMatch && typeMatch && dlcMatch;
 }
 
@@ -281,45 +312,44 @@ function anyFilterActive() {
   const ratingActive = !(activeStars.size === 1 && activeStars.has("Any"));
   const typeActive = activeType !== null;
   const availabilityActive = selectedBossFilters.size > 0;
-  const dlcActive = showDLCItems; // If you want to include DLC toggle as filter
+  const dlcActive = showDLCItems;
 
-  return searchActive || ratingActive || typeActive || availabilityActive || dlcActive;
+  return (
+    searchActive ||
+    ratingActive ||
+    typeActive ||
+    availabilityActive ||
+    dlcActive
+  );
 }
 
 bossBtn.onclick = () => {
-  bossModal.style.display = "block"; // keep for initial visibility
+  bossModal.style.display = "block";
   requestAnimationFrame(() => {
     bossModal.classList.add("open");
   });
 };
 
-bossModal.addEventListener("click", (e) => {
-  if (e.target === bossModal) {
-    closeBossModalFunc();
-  }
-});
-
 let lastConfirmedBossStates = new Map();
 
 confirmBossFilters.onclick = () => {
   selectedBossFilters.clear();
-  lastConfirmedBossStates.clear(); 
+  lastConfirmedBossStates.clear();
 
   bossCheckboxes.forEach((box) => {
     if (box.checked) {
       const values = box.value.split("|");
       values.forEach((val) => selectedBossFilters.add(val));
     }
-    
+
     lastConfirmedBossStates.set(box, box.checked);
   });
 
   closeBossModalFunc();
   renderCards();
   bossBtn.classList.toggle("active", selectedBossFilters.size > 0);
-bossBtn.querySelector(".ellipsis")?.remove();
-bossBtn.insertAdjacentHTML("beforeend", `<span class="ellipsis">…</span>`);
-
+  bossBtn.querySelector(".ellipsis")?.remove();
+  bossBtn.insertAdjacentHTML("beforeend", `<span class="ellipsis">…</span>`);
 };
 
 const container = document.getElementById("cards-container");
@@ -336,20 +366,20 @@ function truncate(text, maxLength) {
 }
 
 function truncateHTML(str, maxLength) {
-  let result = '';
+  let result = "";
   let length = 0;
   let inTag = false;
 
   for (let i = 0; i < str.length; i++) {
     let char = str[i];
 
-    if (char === '<') inTag = true;
+    if (char === "<") inTag = true;
     if (!inTag) length++;
     result += char;
-    if (char === '>') inTag = false;
+    if (char === ">") inTag = false;
 
     if (length >= maxLength) {
-      result += '...';
+      result += "...";
       break;
     }
   }
@@ -367,12 +397,15 @@ function createCard(item, noModal = false) {
   card.innerHTML = `
     <img src="${iconURL}" alt="${item.name} icon"
       style="position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; object-fit: contain; border-radius: 5px;">
-    <div class="title">${item.name}</div>
+    <div class="title">${item.name}${item.dlc ? " " + DLC_SPAN : ""}</div>
     <div class="stars">${item.rating}</div>
     <div class="type">${item.type}</div>
-    <div class="description">${truncateHTML(formatDescription(item.description), 300)}</div>
+    <div class="description">${truncateHTML(
+      formatDescription(item.description),
+      300
+    )}</div>
 
-  `;
+`;
 
   return card;
 }
@@ -386,7 +419,8 @@ function renderCards() {
     const matchesStar = activeStars.has("Any") || activeStars.has(item.rating);
     const matchesType = !activeType || item.type === activeType;
     const matchesBoss =
-      selectedBossFilters.size === 0 || selectedBossFilters.has(item.availability);
+      selectedBossFilters.size === 0 ||
+      selectedBossFilters.has(item.availability);
 
     if (!showDLCItems && item.dlc === true) {
       return false;
@@ -405,9 +439,11 @@ function renderCards() {
 
   if (currentSort === "parent" && filtersExcludingDLC()) {
     currentSort = "az";
-    const azOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === "az");
+    const azOption = Array.from(sortOptions).find(
+      (opt) => opt.getAttribute("data-value") === "az"
+    );
     if (azOption) {
-      sortOptions.forEach(opt => opt.classList.remove("active"));
+      sortOptions.forEach((opt) => opt.classList.remove("active"));
       azOption.classList.add("active");
       sortDropdownBtn.innerHTML = `Sort by: ${azOption.textContent} <span class="dropdown-arrow">▼</span>`;
     }
@@ -416,16 +452,22 @@ function renderCards() {
   if (currentSort === "parent") {
     container.style.display = "block";
 
-    const allParents = [...new Set(filtered.map(item => item.parent).filter(p => p && p !== "Miscellaneous"))];
+    const allParents = [
+      ...new Set(
+        filtered
+          .map((item) => item.parent)
+          .filter((p) => p && p !== "Miscellaneous")
+      ),
+    ];
 
-    const matchedParents = allParents.filter(parentName =>
+    const matchedParents = allParents.filter((parentName) =>
       parentName.toLowerCase().includes(keyword)
     );
-    const matchedItems = filtered.filter(item =>
+    const matchedItems = filtered.filter((item) =>
       item.name.toLowerCase().includes(keyword)
     );
     const matchedItemsByParent = new Map();
-    matchedItems.forEach(item => {
+    matchedItems.forEach((item) => {
       if (!item.parent) return;
       if (!matchedItemsByParent.has(item.parent)) {
         matchedItemsByParent.set(item.parent, []);
@@ -433,13 +475,12 @@ function renderCards() {
       matchedItemsByParent.get(item.parent).push(item);
     });
 
-    // First render matched parents
-    matchedParents.forEach(parentName => {
+    matchedParents.forEach((parentName) => {
       const cardsGroup = document.createElement("div");
       cardsGroup.className = "parent-cards-group";
-      const allChildren = filtered.filter(item => item.parent === parentName);
+      const allChildren = filtered.filter((item) => item.parent === parentName);
 
-      allChildren.forEach(item => {
+      allChildren.forEach((item) => {
         if (renderedItemNames.has(item.name)) return;
         cardsGroup.appendChild(createCard(item));
         renderedItemNames.add(item.name);
@@ -450,19 +491,18 @@ function renderCards() {
       container.appendChild(cardsGroup);
     });
 
-    // Now render remaining matchedItemsByParent groups that weren't already handled
-    allParents.forEach(parentName => {
+    allParents.forEach((parentName) => {
       if (matchedParents.includes(parentName)) return;
 
-      const matchedChildren = (matchedItemsByParent.get(parentName) || []).filter(
-        item => !renderedItemNames.has(item.name)
-      );
+      const matchedChildren = (
+        matchedItemsByParent.get(parentName) || []
+      ).filter((item) => !renderedItemNames.has(item.name));
 
       if (matchedChildren.length === 0) return;
 
       const cardsGroup = document.createElement("div");
       cardsGroup.className = "parent-cards-group";
-      matchedChildren.forEach(item => {
+      matchedChildren.forEach((item) => {
         cardsGroup.appendChild(createCard(item));
         renderedItemNames.add(item.name);
       });
@@ -472,26 +512,30 @@ function renderCards() {
       container.appendChild(cardsGroup);
     });
 
-    // No parent items
-    matchedItems.filter(item => !item.parent).forEach(item => {
-      if (renderedItemNames.has(item.name)) return;
-      container.appendChild(createCard(item));
-      renderedItemNames.add(item.name);
-    });
+    matchedItems
+      .filter((item) => !item.parent)
+      .forEach((item) => {
+        if (renderedItemNames.has(item.name)) return;
+        container.appendChild(createCard(item));
+        renderedItemNames.add(item.name);
+      });
 
-    // Miscellaneous items
     const filtersActive = anyFilterActive();
-    const miscItems = data.filter(item => {
+    const miscItems = data.filter((item) => {
       if (item.parent !== "Miscellaneous") return false;
       if (!showDLCItems && item.dlc === true) return false;
       if (renderedItemNames.has(item.name)) return false;
 
-      const keywordMatch = item.name.toLowerCase().includes(keyword) || keyword === "";
+      const keywordMatch =
+        item.name.toLowerCase().includes(keyword) || keyword === "";
       if (!filtersActive) return keywordMatch;
 
-      const ratingMatch = activeStars.has("Any") || activeStars.has(item.rating);
+      const ratingMatch =
+        activeStars.has("Any") || activeStars.has(item.rating);
       const typeMatch = !activeType || item.type === activeType;
-      const bossMatch = selectedBossFilters.size === 0 || selectedBossFilters.has(item.availability);
+      const bossMatch =
+        selectedBossFilters.size === 0 ||
+        selectedBossFilters.has(item.availability);
 
       return keywordMatch && ratingMatch && typeMatch && bossMatch;
     });
@@ -514,7 +558,7 @@ function renderCards() {
       const cardsGroup = document.createElement("div");
       cardsGroup.className = "parent-cards-group";
 
-      miscItems.forEach(item => {
+      miscItems.forEach((item) => {
         cardsGroup.appendChild(createCard(item, true));
         renderedItemNames.add(item.name);
       });
@@ -524,7 +568,7 @@ function renderCards() {
   } else {
     container.style.display = "grid";
 
-    let searched = filtered.filter(item =>
+    let searched = filtered.filter((item) =>
       item.name.toLowerCase().includes(keyword)
     );
 
@@ -538,7 +582,7 @@ function renderCards() {
       });
     }
 
-    searched.forEach(item => {
+    searched.forEach((item) => {
       if (renderedItemNames.has(item.name)) return;
       container.appendChild(createCard(item));
       renderedItemNames.add(item.name);
@@ -548,7 +592,6 @@ function renderCards() {
   bindCardClicks();
   updateClearButton();
 }
-
 
 searchInput.addEventListener("input", renderCards);
 
@@ -586,31 +629,30 @@ const modalBody = document.getElementById("modalBody");
 const closeBtn = document.querySelector(".close-button");
 
 function openModal() {
-  console.log("openModal called");
-  modal.classList.remove('hide');
-  modal.style.display = 'block';
+  modal.classList.remove("hide");
+  modal.style.display = "block";
 
   requestAnimationFrame(() => {
-    modal.classList.add('show');
+    modal.classList.add("show");
   });
 
   const scrollbarWidth = getScrollbarWidth();
-  document.body.style.paddingRight = scrollbarWidth + 'px';
+  document.body.style.paddingRight = scrollbarWidth + "px";
   document.body.classList.add("modal-open");
 }
 
 function closeModal() {
-  modal.classList.remove('show');
-  modal.classList.add('hide');
+  modal.classList.remove("show");
+  modal.classList.add("hide");
 
-  const content = modal.querySelector('.modal-content');
+  const content = modal.querySelector(".modal-content");
 
-  content.addEventListener('animationend', function handleAnimationEnd() {
-    modal.style.display = 'none';
-    content.removeEventListener('animationend', handleAnimationEnd);
+  content.addEventListener("animationend", function handleAnimationEnd() {
+    modal.style.display = "none";
+    content.removeEventListener("animationend", handleAnimationEnd);
 
     document.body.classList.remove("modal-open");
-    document.body.style.paddingRight = '';
+    document.body.style.paddingRight = "";
   });
 }
 
@@ -620,7 +662,7 @@ window.addEventListener("click", (e) => {
   }
 });
 
-closeBtn.addEventListener('click', closeModal);
+closeBtn.addEventListener("click", closeModal);
 
 function bindCardClicks() {
   document.querySelectorAll(".card").forEach((card) => {
@@ -629,7 +671,7 @@ function bindCardClicks() {
       const wikiName = encodeURIComponent(
         item.name.replace(/’/g, "'").replace(/ /g, "_")
       );
-      
+
       const wikiURL = `https://fargosmods.wiki.gg/wiki/${wikiName}`;
       const iconURL =
         iconMap[item.name] ||
@@ -637,38 +679,43 @@ function bindCardClicks() {
       modalBody.innerHTML = `
   <div class="modal-header">
     <div class="title" style="display: flex; align-items: center; gap: 8px;">
-      <span>${item.name}</span>
-      <img src="${iconURL}" alt="${item.name} icon"
-        style="width: 1.2em; height: 1.2em; object-fit: contain; border-radius: 4px;">
-    </div>
+  <span>${item.name}</span>
+  <img src="${iconURL}" alt="${
+        item.name
+      } icon" style="width: 1.2em; height: 1.2em; object-fit: contain; border-radius: 4px;">
+  ${item.dlc ? DLC_SPAN : ""}
+</div>
     <div class="stars">${item.rating}</div>
     <div class="type">${item.type}</div>
   </div>
   <div class="scroll-description">${formatDescription(item.description)}</div>
   <div class="modal-footer" style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 20px; gap: 12px; font-size: 0.95em; color: white; flex-wrap: wrap;">
     <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Source</a>
-    <span class="modal-tag availability-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Filter by availability">${item.availability || "Unknown"}</span>
+    <span class="modal-tag availability-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Filter by availability">${
+      item.availability || "Unknown"
+    }</span>
     <span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>
 
-    ${
-      data.some(child => child.parent === item.name)
-        ? `<span class="modal-tag children-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to children section">Children</span>`
-        : ''
-    }
+${
+  data.some((child) => child.parent === item.name)
+    ? `<span class="modal-tag children-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to children section">Children</span>`
+    : ""
+}
 
-    ${
-      item.dlc
-        ? `<span class="modal-tag dlc-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show DLC items only">DLC</span>`
-        : ''
-    }
+${
+  item.dlc
+    ? `<span class="modal-tag dlc-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show DLC items only">DLC</span>`
+    : ""
+}
 
-    <a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Wiki Link</a>
+<a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Wiki Link</a>
   </div>
 `;
       const availabilityTag = modalBody.querySelector(".availability-tag");
       availabilityTag?.addEventListener("click", () => {
         resetFiltersAndSetAvailability(item.availability);
         closeModal();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
       const parentTag = modalBody.querySelector(".parent-tag");
@@ -676,104 +723,28 @@ function bindCardClicks() {
         const headerName = item.parent || "Miscellaneous";
         resetFiltersAndScrollToHeader(headerName);
         closeModal();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
       const childrenTag = modalBody.querySelector(".children-tag");
       childrenTag?.addEventListener("click", () => {
         resetFiltersAndScrollToHeader(item.name);
         closeModal();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
-      const dlcTag = modalBody.querySelector(".dlc-tag");
-      dlcTag?.addEventListener("click", () => {
-        // Reset all filters and set sorting to DLC first
-        activeStars.clear();
-        activeStars.add("Any");
-        ratingDropdownBtn.innerHTML = `Rating: Any <span class="dropdown-arrow">▼</span>`;
-        ratingDropdownBtn.classList.remove("active");
-        ratingOptions.forEach((opt) => {
-          const r = opt.getAttribute("data-value");
-          opt.classList.toggle("active", r === "");
+      modalBody.querySelectorAll(".dlc-tag").forEach((dlcTag) => {
+        dlcTag.addEventListener("click", () => {
+          activateDLCSorting();
+          closeModal();
+          window.scrollTo({ top: 0, behavior: "smooth" });
         });
-
-        activeType = null;
-        typeDropdownBtn.innerHTML = `Type: Any <span class="dropdown-arrow">▼</span>`;
-        typeDropdownBtn.classList.remove("active");
-        typeOptions.forEach((opt) => opt.classList.remove("active"));
-        typeOptions[0].classList.add("active");
-
-        searchInput.value = "";
-        updateClearButton();
-
-        selectedBossFilters.clear();
-        bossCheckboxes.forEach((box) => (box.checked = false));
-        bossBtn.classList.remove("active");
-        bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
-
-        showDLCItems = true;
-        dlcToggle.classList.add("active");
-        dlcToggle.classList.remove("inactive");
-
-        currentSort = "dlcFirst";
-        sortOptions.forEach((opt) => opt.classList.remove("active"));
-        const dlcFirstOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === "dlcFirst");
-        if (dlcFirstOption) {
-          dlcFirstOption.classList.add("active");
-          sortDropdownBtn.innerHTML = `Sort by: ${dlcFirstOption.textContent} <span class="dropdown-arrow">▼</span>`;
-        }
-
-        renderCards();
-        closeModal();
       });
 
       openModal();
     };
   });
 }
-
-
-const dlcTag = modalBody.querySelector(".dlc-tag");
-dlcTag?.addEventListener("click", () => {
-  // Reset all filters and set sorting to DLC first
-  activeStars.clear();
-  activeStars.add("Any");
-  ratingDropdownBtn.innerHTML = `Rating: Any <span class="dropdown-arrow">▼</span>`;
-  ratingDropdownBtn.classList.remove("active");
-  ratingOptions.forEach((opt) => {
-    const r = opt.getAttribute("data-value");
-    opt.classList.toggle("active", r === "");
-  });
-
-  activeType = null;
-  typeDropdownBtn.innerHTML = `Type: Any <span class="dropdown-arrow">▼</span>`;
-  typeDropdownBtn.classList.remove("active");
-  typeOptions.forEach((opt) => opt.classList.remove("active"));
-  typeOptions[0].classList.add("active");
-
-  searchInput.value = "";
-  updateClearButton();
-
-  selectedBossFilters.clear();
-  bossCheckboxes.forEach((box) => (box.checked = false));
-  bossBtn.classList.remove("active");
-  bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
-
-  showDLCItems = true;
-  dlcToggle.classList.add("active");
-  dlcToggle.classList.remove("inactive");
-
-  currentSort = "dlcFirst";
-  sortOptions.forEach((opt) => opt.classList.remove("active"));
-  const dlcFirstOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === "dlcFirst");
-  if (dlcFirstOption) {
-    dlcFirstOption.classList.add("active");
-    sortDropdownBtn.innerHTML = `Sort by: ${dlcFirstOption.textContent} <span class="dropdown-arrow">▼</span>`;
-  }
-
-  renderCards();
-  closeModal();
-});
-
 
 const dlcToggle = document.getElementById("dlcToggle");
 
@@ -807,7 +778,7 @@ resetFiltersBtn.addEventListener("click", () => {
   typeDropdownBtn.innerHTML = `Type: Any <span class="dropdown-arrow">▼</span>`;
   typeDropdownBtn.classList.remove("active");
   typeOptions.forEach((opt) => opt.classList.remove("active"));
-  typeOptions[0].classList.add("active"); // Re-activate "Any"
+  typeOptions[0].classList.add("active");
 
   searchInput.value = "";
 
@@ -820,7 +791,7 @@ resetFiltersBtn.addEventListener("click", () => {
   bossBtn.innerHTML = `Availability <span class="ellipsis">…</span>`;
   bossCheckboxes.forEach((box) => (box.checked = false));
 
-  currentSort = "parent"; // Reset sorting to parent
+  currentSort = "parent";
 
   const parentOption = Array.from(sortOptions).find(
     (opt) => opt.getAttribute("data-value") === "parent"
@@ -847,44 +818,44 @@ ratingOptions.forEach((option) => {
   option.addEventListener("click", () => {
     const value = option.getAttribute("data-value");
 
-if (value === "") {
-  activeStars.clear();
-  activeStars.add("Any");
-} else {
-  if (activeStars.has("Any")) {
-    activeStars.delete("Any");
-  }
+    if (value === "") {
+      activeStars.clear();
+      activeStars.add("Any");
+    } else {
+      if (activeStars.has("Any")) {
+        activeStars.delete("Any");
+      }
 
-  if (activeStars.has(value)) {
-    activeStars.delete(value);
-  } else {
-    activeStars.add(value);
-  }
+      if (activeStars.has(value)) {
+        activeStars.delete(value);
+      } else {
+        activeStars.add(value);
+      }
 
-  if (activeStars.size === 0) {
-    activeStars.add("Any");
-  }
-}
+      if (activeStars.size === 0) {
+        activeStars.add("Any");
+      }
+    }
 
-const selected = Array.from(activeStars).filter((s) => s !== "Any");
-let label = "Any";
+    const selected = Array.from(activeStars).filter((s) => s !== "Any");
+    let label = "Any";
 
-if (selected.length > 0) {
-  if (selected.length === 1) {
-    label = selected[0];
-  } else {
-    const first = selected[0];
-    const extraCount = selected.length - 1;
-    label = `${first} +${extraCount}`;
-  }
+    if (selected.length > 0) {
+      if (selected.length === 1) {
+        label = selected[0];
+      } else {
+        const first = selected[0];
+        const extraCount = selected.length - 1;
+        label = `${first} +${extraCount}`;
+      }
 
-  ratingDropdownBtn.title = selected.join(", ");
-} else {
-  label = "Any";
-  ratingDropdownBtn.title = "";
-}
+      ratingDropdownBtn.title = selected.join(", ");
+    } else {
+      label = "Any";
+      ratingDropdownBtn.title = "";
+    }
 
-ratingDropdownBtn.innerHTML = `Rating: ${label} <span class="dropdown-arrow">▼</span>`;
+    ratingDropdownBtn.innerHTML = `Rating: ${label} <span class="dropdown-arrow">▼</span>`;
 
     ratingDropdownBtn.classList.toggle("active", selected.length > 0);
 
@@ -902,9 +873,12 @@ ratingDropdownBtn.innerHTML = `Rating: ${label} <span class="dropdown-arrow">▼
 });
 
 window.addEventListener("click", (e) => {
-  const clickedInsideRating = ratingDropdown.contains(e.target) || ratingDropdownBtn.contains(e.target);
-  const clickedInsideType = typeDropdown.contains(e.target) || typeDropdownBtn.contains(e.target);
-  const clickedInsideSort = sortDropdown.contains(e.target) || sortDropdownBtn.contains(e.target);
+  const clickedInsideRating =
+    ratingDropdown.contains(e.target) || ratingDropdownBtn.contains(e.target);
+  const clickedInsideType =
+    typeDropdown.contains(e.target) || typeDropdownBtn.contains(e.target);
+  const clickedInsideSort =
+    sortDropdown.contains(e.target) || sortDropdownBtn.contains(e.target);
 
   if (!clickedInsideRating) {
     ratingDropdown.classList.remove("open");
@@ -918,25 +892,30 @@ window.addEventListener("click", (e) => {
 });
 
 function openBossModal() {
-  bossModal.style.display = "block";  
-  void bossModal.offsetWidth;        
-  bossModal.classList.add("open");   
+  bossModal.style.display = "block";
+  void bossModal.offsetWidth;
+  bossModal.classList.add("open");
 
+  const scrollbarWidth = getScrollbarWidth();
+  document.body.style.paddingRight = scrollbarWidth + "px";
   document.body.classList.add("modal-open");
 }
 
+
 function closeBossModalFunc() {
-  bossModal.classList.remove("open"); // triggers close animation
+  bossModal.classList.remove("open");
 
   setTimeout(() => {
     bossModal.style.display = "none";
     document.body.classList.remove("modal-open");
-  }, 100); // match your animation timing
+    document.body.style.paddingRight = "";  
+  }, 100);
 }
+
 
 bossModal.addEventListener("transitionend", (e) => {
   if (e.target === bossModal && !bossModal.classList.contains("open")) {
-    bossModal.style.display = "none"; // Hide modal after animation ends
+    bossModal.style.display = "none";
   }
 });
 
@@ -986,17 +965,17 @@ const sortDropdownBtn = document.getElementById("sortDropdownBtn");
 const sortDropdown = document.getElementById("sortDropdown");
 const sortOptions = sortDropdown.querySelectorAll("div");
 
-let currentSort = "parent"; // default sort
+let currentSort = "parent";
 
 sortDropdownBtn.addEventListener("click", () => {
   ratingDropdown.classList.remove("open");
   typeDropdown.classList.remove("open");
   sortDropdown.classList.toggle("open");
 });
-sortOptions.forEach(option => {
+sortOptions.forEach((option) => {
   option.addEventListener("click", () => {
     if (option.classList.contains("active")) return;
-    sortOptions.forEach(opt => opt.classList.remove("active"));
+    sortOptions.forEach((opt) => opt.classList.remove("active"));
     option.classList.add("active");
     currentSort = option.getAttribute("data-value");
     sortDropdownBtn.innerHTML = `Sort by: ${option.textContent} <span class="dropdown-arrow">▼</span>`;
@@ -1009,24 +988,22 @@ sortOptions.forEach(option => {
 
     const dlcToggle = document.getElementById("dlcToggle");
     if (dlcToggle) {
-  if (showDLCItems) {
-    dlcToggle.classList.add("active");    // add active to show green checkmark
-    dlcToggle.classList.remove("inactive"); // remove inactive to brighten button
-  } else {
-    dlcToggle.classList.remove("active"); // remove active to hide checkmark
-    dlcToggle.classList.add("inactive");  // add inactive to dim button
-  }
-}
-
+      if (showDLCItems) {
+        dlcToggle.classList.add("active");
+        dlcToggle.classList.remove("inactive");
+      } else {
+        dlcToggle.classList.remove("active");
+        dlcToggle.classList.add("inactive");
+      }
+    }
 
     renderCards();
   });
 });
 
-
-
-
-const defaultOption = Array.from(sortOptions).find(opt => opt.getAttribute("data-value") === currentSort);
+const defaultOption = Array.from(sortOptions).find(
+  (opt) => opt.getAttribute("data-value") === currentSort
+);
 if (defaultOption) {
   sortDropdownBtn.innerHTML = `Sort by: ${defaultOption.textContent} <span class="dropdown-arrow">▼</span>`;
   sortOptions.forEach((opt) =>
@@ -1039,6 +1016,5 @@ renderCards();
 document.querySelectorAll("img.boss-icon").forEach((img) => {
   const key = img.getAttribute("data-boss");
   img.src =
-    iconMap[key] ||
-    "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
+    iconMap[key] || "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
 });
