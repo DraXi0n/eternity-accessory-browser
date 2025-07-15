@@ -544,14 +544,21 @@ body {
 }
 
 .parent-hr {
-  border: none;
   height: 2px;
-  background-color: var(--accent);
-
-  margin: 10px auto 0 auto;
+  border: none;
   width: 96.5vw;
+  margin: 10px auto 0 auto;
   max-width: none;
+  background: linear-gradient(to right, transparent, var(--accent), transparent);
+
+  background: linear-gradient(to right,
+        transparent 0%,
+        var(--accent) 20%,
+        var(--accent) 80%,
+        transparent 100%);
 }
+
+
 
 .parent-cards-group {
   display: grid;
