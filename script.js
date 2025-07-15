@@ -2,11 +2,81 @@ const bossBtn = document.getElementById("bossFilterBtn");
 const bossModal = document.getElementById("bossModal");
 const closeBossModal = document.getElementById("closeBossModal");
 const confirmBossFilters = document.getElementById("confirmBossFilters");
+const selectedBossText = document.getElementById("selectedBossText");
 const bossCheckboxes = bossModal.querySelectorAll('input[type="checkbox"]');
+bossCheckboxes.forEach((box) => {
+  box.addEventListener("change", updateSelectedBossText);
+});
+
+bossCheckboxes.forEach((box) => {
+  box.addEventListener("change", () => {
+    const val = box.value;
+
+  if (val === allMechBossValue) {
+  bossCheckboxes.forEach((b) => {
+    if (mechBossValues.includes(b.value)) {
+      b.checked = box.checked; 
+    }
+  });
+}
+
+    
+    if (mechBossValues.includes(val)) {
+      const allMechBox = Array.from(bossCheckboxes).find(
+        (b) => b.value === allMechBossValue
+      );
+
+      const allThreeChecked = mechBossValues.every((val) =>
+        Array.from(bossCheckboxes).some((b) => b.value === val && b.checked)
+      );
+
+      if (allMechBox) {
+        allMechBox.checked = allThreeChecked;
+      }
+    }
+
+    updateSelectedBossText();
+  });
+});
+
+
 let userSelectedSortAz = false;
 let selectedBossFilters = new Set();
+const mechBossValues = [
+  "Post-Twins",
+  "Post-Destroyer",
+  "Post-Skeletron Prime"
+];
+
+const firstMechBossValue = "Post-First Mech Boss";
+const allMechBossValue = "Post-Mech Bosses";
+
 let showDLCItems = false;
 const DLC_SPAN = `<span class="dlc-tag" title="Fargo's Souls DLC">DLC</span>`;
+
+function updateSelectedBossText() {
+  const checkedBoxes = Array.from(bossCheckboxes).filter((box) => box.checked);
+  const hasAllMech = checkedBoxes.some((box) => box.value === allMechBossValue);
+
+  const selectedNames = checkedBoxes
+    .map((box) => {
+      const val = box.value;
+      
+      if (hasAllMech && mechBossValues.includes(val)) return null;
+
+      const label = box.closest("label");
+      if (!label) return null;
+      const clone = label.cloneNode(true);
+      clone.querySelectorAll("input, img").forEach((el) => el.remove());
+      return clone.textContent.trim();
+    })
+    .filter((name) => name);
+
+  selectedBossText.textContent = "Post: " + (selectedNames.join(", ") || "");
+}
+
+
+
 
 function activateDLCSorting() {
   activeStars.clear();
@@ -257,6 +327,9 @@ function resetFiltersAndSetAvailability(availability) {
       selectedBossFilters.add(availability);
     }
   });
+
+  updateSelectedBossText();
+
   bossBtn.classList.add("active");
   bossBtn.querySelector(".ellipsis")?.remove();
   bossBtn.insertAdjacentHTML("beforeend", `<span class="ellipsis">…</span>`);
@@ -336,14 +409,32 @@ confirmBossFilters.onclick = () => {
   selectedBossFilters.clear();
   lastConfirmedBossStates.clear();
 
-  bossCheckboxes.forEach((box) => {
-    if (box.checked) {
-      const values = box.value.split("|");
-      values.forEach((val) => selectedBossFilters.add(val));
-    }
+  let mechBossCount = 0;
 
-    lastConfirmedBossStates.set(box, box.checked);
-  });
+bossCheckboxes.forEach((box) => {
+  if (box.checked) {
+    const values = box.value.split("|");
+    values.forEach((val) => {
+      selectedBossFilters.add(val);
+      if (mechBossValues.includes(val)) mechBossCount++;
+    });
+  }
+  lastConfirmedBossStates.set(box, box.checked);
+});
+
+if (mechBossCount > 0) {
+  selectedBossFilters.add(firstMechBossValue);
+}
+
+  bossCheckboxes.forEach((box) => {
+  if (box.checked) {
+    const values = box.value.split("|");
+    values.forEach((val) => selectedBossFilters.add(val));
+  }
+
+  lastConfirmedBossStates.set(box, box.checked);
+});
+
 
   closeBossModalFunc();
   renderCards();
@@ -899,7 +990,10 @@ function openBossModal() {
   const scrollbarWidth = getScrollbarWidth();
   document.body.style.paddingRight = scrollbarWidth + "px";
   document.body.classList.add("modal-open");
+
+  updateSelectedBossText(); 
 }
+
 
 
 function closeBossModalFunc() {
