@@ -84,19 +84,11 @@
     <div id="bossModal" class="modal">
       <div class="modal-content">
         <span class="close-button" id="closeBossModal">&times;</span>
-
-        <p style="color: white; font-size: 1.1em; margin-bottom: 15px">
-          Select one or more bosses you have defeated. This filter will then
-          show only the items that become obtainable as a result of defeating
-          the selected boss(es), helping you discover new gear now available to
-          you.
-        </p>
-
         <div id="bossFiltersContainer">
           <div class="boss-section">
             <h3 style="color: #00e676">Pre-Hardmode</h3>
             <label
-              ><input type="checkbox" value="Pre-Boss" /> No Bosses (Pre-Boss)
+              ><input type="checkbox" value="Pre-Boss" /> Pre-Boss
               <img class="boss-icon" data-boss="No Bosses"
             /></label>
             <label
@@ -153,12 +145,8 @@
               ><input type="checkbox" value="Post-Queen Slime" /> Queen Slime
               <img class="boss-icon" data-boss="Queen Slime"
             /></label>
-            <label
-              ><input type="checkbox" value="Post-First Mech Boss" /> First Mech
-              Boss <img class="boss-icon" data-boss="First Mech Boss"
-            /></label>
-            <label
-              ><input type="checkbox" value="Post-Twins" /> The Twins
+            <label>
+              <input type="checkbox" value="Post-Twins" /> The Twins
               <img class="boss-icon" data-boss="The Twins"
             /></label>
             <label
@@ -249,7 +237,15 @@
           </div>
         </div>
 
-        <div style="text-align: right; margin-top: 20px">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+          "
+        >
+          <div id="selectedBossText" style="color: #ccc">Post:</div>
           <button
             id="confirmBossFilters"
             style="
