@@ -553,8 +553,8 @@ body {
 
   background: linear-gradient(to right,
         transparent 0%,
-        var(--accent) 20%,
-        var(--accent) 80%,
+        var(--accent) 10%,
+        var(--accent) 90%,
         transparent 100%);
 }
 
