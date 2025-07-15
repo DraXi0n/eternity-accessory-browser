@@ -141,9 +141,10 @@ function showItemModal(item) {
     <div class="scroll-description">${formatDescription(item.description)}</div>
     <div class="modal-footer" style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 20px; gap: 12px; font-size: 0.95em; color: white; flex-wrap: wrap;">
       <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Source</a>
-      <span class="modal-tag availability-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show other items with this availability">${
-        item.availability || "Unknown"
-      }</span>
+     ${item.parent && item.parent !== "Miscellaneous"
+  ? `<span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>`
+  : ""}
+
       <span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>
       ${
         data.some((child) => child.parent === item.name)
@@ -528,17 +529,34 @@ function renderCards() {
     return searchActive || ratingActive || typeActive || availabilityActive;
   };
 
-  if (currentSort === "parent" && filtersExcludingDLC()) {
-    currentSort = "az";
-    const azOption = Array.from(sortOptions).find(
-      (opt) => opt.getAttribute("data-value") === "az"
-    );
-    if (azOption) {
-      sortOptions.forEach((opt) => opt.classList.remove("active"));
-      azOption.classList.add("active");
-      sortDropdownBtn.innerHTML = `Sort by: ${azOption.textContent} <span class="dropdown-arrow">▼</span>`;
-    }
+if (currentSort === "parent" && filtersExcludingDLC()) {
+  currentSort = "az";
+  const azOption = Array.from(sortOptions).find(
+    (opt) => opt.getAttribute("data-value") === "az"
+  );
+  if (azOption) {
+    sortOptions.forEach((opt) => opt.classList.remove("active"));
+    azOption.classList.add("active");
+    sortDropdownBtn.innerHTML = `Sort by: ${azOption.textContent} <span class="dropdown-arrow">▼</span>`;
   }
+}
+
+if (
+  currentSort === "az" &&
+  !filtersExcludingDLC() &&
+  !userSelectedSortAz
+) {
+  currentSort = "parent";
+  const parentOption = Array.from(sortOptions).find(
+    (opt) => opt.getAttribute("data-value") === "parent"
+  );
+  if (parentOption) {
+    sortOptions.forEach((opt) => opt.classList.remove("active"));
+    parentOption.classList.add("active");
+    sortDropdownBtn.innerHTML = `Sort by: ${parentOption.textContent} <span class="dropdown-arrow">▼</span>`;
+  }
+}
+
 
   if (currentSort === "parent") {
     container.style.display = "block";
@@ -785,7 +803,10 @@ function bindCardClicks() {
     <span class="modal-tag availability-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Filter by availability">${
       item.availability || "Unknown"
     }</span>
-    <span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>
+    ${item.parent && item.parent !== "Miscellaneous"
+  ? `<span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>`
+  : ""}
+
 
 ${
   data.some((child) => child.parent === item.name)
@@ -1072,6 +1093,7 @@ sortOptions.forEach((option) => {
     sortOptions.forEach((opt) => opt.classList.remove("active"));
     option.classList.add("active");
     currentSort = option.getAttribute("data-value");
+    userSelectedSortAz = currentSort === "az";
     sortDropdownBtn.innerHTML = `Sort by: ${option.textContent} <span class="dropdown-arrow">▼</span>`;
 
     if (currentSort === "dlcFirst") {
