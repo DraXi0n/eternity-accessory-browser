@@ -1480,7 +1480,7 @@ const data = [
     rating: "\u2b50\u2b50\u2b50",
     type: "Soul",
     description:
-      "effectz: makes u a god when u equip it.\n\ngood but seen better tbh",
+      "effectz: makes u absurdly powerful when u equip it.\n\ngood but seen better tbh",
     availability: "Post-Mutant",
     parent: "Miscellaneous",
   },
