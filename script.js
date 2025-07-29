@@ -128,37 +128,35 @@ function showItemModal(item) {
     iconMap[item.name] ||
     "https://fargosmods.wiki.gg/images/6/6e/Missing_image.png";
 
-  modalBody.innerHTML = `
-    <div class="modal-header">
-      <div class="title" style="display: flex; align-items: center; gap: 8px;">
-        <span>${item.name}</span>
-        <img src="${iconURL}" alt="${item.name} icon"
-          style="width: 1.2em; height: 1.2em; object-fit: contain; border-radius: 4px;">
-      </div>
-      <div class="stars">${item.rating}</div>
-      <div class="type">${item.type}</div>
-    </div>
-    <div class="scroll-description">${formatDescription(item.description)}</div>
-    <div class="modal-footer" style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 20px; gap: 12px; font-size: 0.95em; color: white; flex-wrap: wrap;">
-      <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Source</a>
-     ${item.parent && item.parent !== "Miscellaneous"
-  ? `<span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>`
-  : ""}
-
-      <span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>
-      ${
-        data.some((child) => child.parent === item.name)
-          ? `<span class="modal-tag children-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to children section">Children</span>`
-          : ""
-      }
-      ${
-        item.dlc
-          ? `<span class="modal-tag dlc-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show DLC items">DLC</span>`
-          : ""
-      }
-      <a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Wiki Link</a>
-    </div>
-  `;
+ modalBody.innerHTML = `
+    <div class="modal-header">
+      <div class="title" style="display: flex; align-items: center; gap: 8px;">
+        <span>${item.name}</span>
+        <img src="${iconURL}" alt="${item.name} icon"
+          style="width: 1.2em; height: 1.2em; object-fit: contain; border-radius: 4px;">
+      </div>
+      <div class="stars">${item.rating}</div>
+      <div class="type">${item.type}</div>
+    </div>
+    <div class="scroll-description">${formatDescription(item.description)}</div>
+    <div class="modal-footer" style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 20px; gap: 12px; font-size: 0.95em; color: white; flex-wrap: wrap;">
+      <a href="https://docs.google.com/document/d/1obh1n7TIxufvph4KQy1rv7rO4bL1au0XJNESTQptLZ4/edit?tab=t.0#heading=h.qz8l2nyjukur" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Source</a>
+     ${item.parent && item.parent !== "Miscellaneous"
+  ? `<span class="modal-tag parent-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to parent section">Parent</span>`
+  : ""}
+      ${
+        data.some((child) => child.parent === item.name)
+          ? `<span class="modal-tag children-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Go to children section">Children</span>`
+          : ""
+      }
+      ${
+        item.dlc
+          ? `<span class="modal-tag dlc-tag" style="cursor: pointer; color: #00e676; text-decoration: underline;" title="Show DLC items">DLC</span>`
+          : ""
+      }
+      <a href="${wikiURL}" target="_blank" style="color: #00e676; text-decoration: underline; cursor: pointer;">Wiki Link</a>
+    </div>
+  `;
 
   const availabilityTag = modalBody.querySelector(".availability-tag");
   availabilityTag?.addEventListener("click", () => {
